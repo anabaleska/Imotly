@@ -25,7 +25,7 @@ public class SeleniumWebScraper {
             Thread.sleep(5000); // Wait for 5 seconds (to give the page time to load)
 
             int pageCount = 1;
-            while (pageCount <= 100) {
+            while (pageCount <= 5) {
 
             // Locate the elements containing the home listings
             List<WebElement> listings = driver.findElements(By.className("row-listing"));  // Replace with actual class name
@@ -41,13 +41,25 @@ public class SeleniumWebScraper {
                 System.out.println("Location: " + location);
                 System.out.println("--------------------------");
             }
-                List<WebElement> pageNumbers = driver.findElements(By.cssSelector(".pagination ul li a"));
+                try {
+                    WebElement cookiesBanner = driver.findElement(By.cssSelector(".cookies-area.active"));
+                    if (cookiesBanner.isDisplayed()) {
+                        WebElement closeButton = cookiesBanner.findElement(By.cssSelector("button.close-cookies"));  // Assuming the close button has class "close"
+                        closeButton.click();
+                        System.out.println("Closing cookies banner...");
+                    }
+                } catch (Exception e) {
+                    // If no cookie banner is found, ignore it
+                    System.out.println("No cookie banner found.");
+                }
+                List<WebElement> pageNumbers = driver.findElements(By.cssSelector(".pagination ul li.prevnext a"));
                 if (pageNumbers.size() > 0) {
                     // Try to find the next page number (assumes pages are numbered sequentially)
-                    WebElement nextPage = pageNumbers.get(pageCount);  // Click on the (currentPage + 1) page number
+                    //int gotopage=pageNumbers.size()>=12 ? 11:12;
+                    WebElement nextPage = pageNumbers.get(0);  // Click on the (currentPage + 1) page number
 
                     // Ensure the next page number is clickable
-                    wait.until(ExpectedConditions.elementToBeClickable(nextPage));
+                   // wait.until(ExpectedConditions.elementToBeClickable(nextPage));
 
                     nextPage.click();
                     System.out.println("Going to page " + (pageCount + 1));
