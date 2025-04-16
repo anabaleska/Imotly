@@ -72,14 +72,6 @@ public class SeleniumWebScraperReklama5 {
                             imageUrl = "https:" + imageUrl;
                         }
                     }
-
-//                    System.out.println("Title: " + title);
-//                    System.out.println("Price: " + price);
-//                    System.out.println("Location: " + location);
-//                    System.out.println("Link: " + link);
-//                    System.out.println("DatePosted: " + datePosted);
-//                    System.out.println("Image URL: " + imageUrl);
-//                    System.out.println("--------------------------");
                     Ad existingAd = supabaseService.getAdByUrl(link);
                     if (existingAd != null) {
                         System.out.println("Ad already exists: " + title);

@@ -48,14 +48,6 @@ public class SeleniumWebScraperPazar3 {
                     List<WebElement> images = listing.findElements(By.className("ProductionImg"));
                     String imageUrl = images.isEmpty() ? "No image available" : images.get(0).getAttribute("data-src");
 
-//                    System.out.println("Title: " + title);
-//                    System.out.println("Price: " + price);
-//                    System.out.println("Location: " + location);
-//                    System.out.println("Link: " + link);
-//                    System.out.println("DatePosted: " + datePosted);
-//                    System.out.println("ImageUrl: " + imageUrl);
-//
-//                    System.out.println("--------------------------");
                     Ad existingAd = supabaseService.getAdByUrl(link);
                     if (existingAd != null) {
                         System.out.println("Ad already exists: " + title);
