@@ -20,6 +20,7 @@ import java.util.List;
 public class SeleniumWebScraperPazar3 {
 
     private final SupabaseService supabaseService;
+    private static boolean CHECK_ONLY_FIRST_PAGE = true;
 
     @Autowired
     public SeleniumWebScraperPazar3(SupabaseService supabaseService) {
@@ -31,12 +32,14 @@ public class SeleniumWebScraperPazar3 {
         WebDriver driver = new ChromeDriver();
 
         try {
-            driver.get("https://www.pazar3.mk/oglasi/zivealista/prodazba-kupuvanje-izdavanje-baram-za-iznajmuvanje-zamena");
-
-            Thread.sleep(5000);
-
             int pageCount = 1;
+            String baseUrl = "https://www.pazar3.mk/oglasi/zivealista/prodazba-kupuvanje-izdavanje-baram-za-iznajmuvanje-zamena?Page=";
             while (pageCount <= 20) {
+                //https://www.pazar3.mk/oglasi/zivealista/prodazba-kupuvanje-izdavanje-baram-za-iznajmuvanje-zamena?Page=2
+                String pageUrl = baseUrl + pageCount;
+                driver.get(pageUrl);
+                Thread.sleep(5000);
+
                 List<WebElement> listings = driver.findElements(By.className("row-listing"));
 
                 for (WebElement listing : listings) {
@@ -67,6 +70,12 @@ public class SeleniumWebScraperPazar3 {
                     }
                 } catch (Exception e) {
                     System.out.println("No cookie banner found.");
+                }
+
+                if (CHECK_ONLY_FIRST_PAGE) {
+                    System.out.println("Checking only the first page. Stopping here.");
+                    CHECK_ONLY_FIRST_PAGE = false;
+                    break;
                 }
 
                 List<WebElement> pageNumbers = driver.findElements(By.cssSelector(".pagination ul li.prevnext a"));

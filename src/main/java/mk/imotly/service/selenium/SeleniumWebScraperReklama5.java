@@ -18,6 +18,7 @@ import java.util.regex.Matcher;
 
 public class SeleniumWebScraperReklama5 {
     private final SupabaseService supabaseService;
+    private static boolean CHECK_ONLY_FIRST_PAGE = true;
 
     public SeleniumWebScraperReklama5(SupabaseService supabaseService) {
         this.supabaseService = supabaseService;
@@ -28,14 +29,14 @@ public class SeleniumWebScraperReklama5 {
 
         try {
 
-            String baseUrl = "https://www.reklama5.mk/Search?city=&cat=157&q=&sell=0&sell=1&buy=0&buy=1&trade=0&trade=1&includeOld=0&includeOld=1&includeNew=0&includeNew=1&cargoReady=0&DDVIncluded=0&private=0&company=0&page=1&SortByPrice=0&zz=1&pageView=";
-            driver.get(baseUrl);
+            String baseUrl = "https://www.reklama5.mk/Search?city=&cat=157&q=";
 
             Thread.sleep(5000);
 
             int pageCount = 1;
             while (pageCount <= 20) {
-
+                String pageUrl = baseUrl + "&page=" + pageCount;
+                driver.get(pageUrl);
                 List<WebElement> listings = driver.findElements(By.className("ad-top-div"));
 
                 for (WebElement listing : listings) {
@@ -91,6 +92,13 @@ public class SeleniumWebScraperReklama5 {
                 } catch (Exception e) {
                     System.out.println("No cookie banner found.");
                 }
+
+                if (CHECK_ONLY_FIRST_PAGE) {
+                    System.out.println("Checking only the first page. Stopping here.");
+                    CHECK_ONLY_FIRST_PAGE = false;
+                    break;
+                }
+
                 List<WebElement> pageNumbers = driver.findElements(By.className("page-link"));
                 if (pageNumbers.size() > 0) {
 

@@ -1,15 +1,10 @@
 package mk.imotly.repository;
-
 import mk.imotly.model.Ad;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriUtils;
-import java.nio.charset.StandardCharsets;
-
-
 import java.util.List;
 
 @Repository
@@ -82,17 +77,22 @@ public class SupabaseClient {
 
     public Ad getAdByUrl(String url) {
         HttpEntity<Void> entity = new HttpEntity<>(createHeaders());
-        String encodedUrl = UriUtils.encode(url, StandardCharsets.UTF_8);
+
+        String fullUrl = supabaseApiUrl + "/ads?url=eq." + url;
+        System.out.println("Requesting Supabase with URL: " + fullUrl);
 
         ResponseEntity<List<Ad>> response = restTemplate.exchange(
-                supabaseApiUrl + "/ads?url=eq." + encodedUrl,
+                fullUrl,
                 HttpMethod.GET,
                 entity,
                 new ParameterizedTypeReference<List<Ad>>() {}
         );
 
         List<Ad> results = response.getBody();
+        System.out.println("Supabase returned: " + results);
         return (results != null && !results.isEmpty()) ? results.get(0) : null;
     }
+
+
 
 }
