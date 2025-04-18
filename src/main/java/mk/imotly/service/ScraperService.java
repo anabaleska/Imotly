@@ -1,6 +1,5 @@
 package mk.imotly.service;
 
-import mk.imotly.service.SupabaseService;
 import mk.imotly.service.selenium.SeleniumWebScraperPazar3;
 import mk.imotly.service.selenium.SeleniumWebScraperReklama5;
 import org.springframework.scheduling.annotation.Scheduled;
