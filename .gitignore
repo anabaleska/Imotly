@@ -19,6 +19,8 @@ target/
 *.iml
 *.ipr
 .env
+.idea/workspace.xml
+
 
 ### NetBeans ###
 /nbproject/private/
