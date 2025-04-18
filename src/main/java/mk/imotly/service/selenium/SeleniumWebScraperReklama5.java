@@ -18,12 +18,13 @@ import java.util.regex.Matcher;
 
 public class SeleniumWebScraperReklama5 {
     private final SupabaseService supabaseService;
-    private static boolean CHECK_ONLY_FIRST_PAGE = true;
+    //private static boolean CHECK_ONLY_FIRST_PAGE = true;
 
     public SeleniumWebScraperReklama5(SupabaseService supabaseService) {
         this.supabaseService = supabaseService;
     }
     public void scrapeReklama5() {
+        boolean checkOnlyFirstPage = true;
         WebDriverManager.chromedriver().driverVersion("135.0.7049.85").setup();
         WebDriver driver = new ChromeDriver();
 
@@ -93,9 +94,8 @@ public class SeleniumWebScraperReklama5 {
                     System.out.println("No cookie banner found.");
                 }
 
-                if (CHECK_ONLY_FIRST_PAGE) {
+                if (checkOnlyFirstPage) {
                     System.out.println("Checking only the first page. Stopping here.");
-                    CHECK_ONLY_FIRST_PAGE = false;
                     break;
                 }
 

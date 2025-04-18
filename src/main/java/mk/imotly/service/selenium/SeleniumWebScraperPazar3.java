@@ -20,7 +20,7 @@ import java.util.List;
 public class SeleniumWebScraperPazar3 {
 
     private final SupabaseService supabaseService;
-    private static boolean CHECK_ONLY_FIRST_PAGE = true;
+    //private static boolean CHECK_ONLY_FIRST_PAGE = true;
 
     @Autowired
     public SeleniumWebScraperPazar3(SupabaseService supabaseService) {
@@ -28,6 +28,7 @@ public class SeleniumWebScraperPazar3 {
     }
 
     public void scrapePazar3() {
+        boolean checkOnlyFirstPage = true;
         WebDriverManager.chromedriver().driverVersion("135.0.7049.85").setup();
         WebDriver driver = new ChromeDriver();
 
@@ -55,9 +56,18 @@ public class SeleniumWebScraperPazar3 {
                     if (existingAd != null) {
                         System.out.println("Ad already exists: " + title);
                     } else {
-                        Ad ad = new Ad(title, price, location, datePosted, link, "Pazar3.mk", imageUrl);
-                        supabaseService.addAd(ad);
-                        System.out.println("Ad successfully saved to database: " + title);
+                        try {
+                            Ad ad = new Ad(title, price, location, datePosted, link, "Pazar3.mk", imageUrl);
+                            supabaseService.addAd(ad);
+                            System.out.println("Ad successfully saved: " + title);
+                        } catch (Exception e) {
+                            if (e.getMessage().contains("409")) {
+                                System.out.println("Conflict (409): Ad already exists in the database: " + title);
+                            } else {
+                                System.out.println("Failed to save ad: " + title);
+                                e.printStackTrace();
+                            }
+                        }
                     }
                 }
 
@@ -72,12 +82,10 @@ public class SeleniumWebScraperPazar3 {
                     System.out.println("No cookie banner found.");
                 }
 
-                if (CHECK_ONLY_FIRST_PAGE) {
+                if (checkOnlyFirstPage) {
                     System.out.println("Checking only the first page. Stopping here.");
-                    CHECK_ONLY_FIRST_PAGE = false;
                     break;
                 }
-
                 List<WebElement> pageNumbers = driver.findElements(By.cssSelector(".pagination ul li.prevnext a"));
                 if (pageNumbers.size() > 0) {
                     WebElement nextPage = pageNumbers.get(0);
