@@ -16,10 +16,10 @@ public class AuthController {
         this.supabaseService = supabaseService;
     }
 
-    // Directly accept the registration details as a JSON object
+
     @PostMapping("/register")
     public String registerUser(@RequestBody RegisterRequest request) {
-        // Call the Supabase service to register the user
+
         System.out.println("Registering user: " + request.getEmail());
         return supabaseService.registerUser(request.getEmail(), request.getPassword(), request.getName(), request.getSurname());
     }

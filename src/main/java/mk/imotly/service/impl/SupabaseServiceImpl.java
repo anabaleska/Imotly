@@ -74,7 +74,7 @@ public class SupabaseServiceImpl implements SupabaseService {
 
         // Save user to users table
         User user = new User(email, name, surname);
-        supabaseClient.addUser(user); // <-- assuming SupabaseClient is injected
+        supabaseClient.addUser(user);
 
         return "User registered and saved successfully.";
     }

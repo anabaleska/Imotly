@@ -98,7 +98,7 @@ public class SupabaseClient {
         HttpEntity<User> request = new HttpEntity<>(user, createHeaders());
 
         ResponseEntity<String> response = restTemplate.postForEntity(
-                supabaseApiUrl + "/users", // your users table
+                supabaseApiUrl + "/users",
                 request,
                 String.class
         );

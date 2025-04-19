@@ -21,7 +21,7 @@ export const registerUser = async (email, password, name, surname) => {
             throw new Error(errorData.message || 'Registration failed');
         }
 
-        const result = await response.text(); // or use .json() if your backend returns JSON
+        const result = await response.text();
         return { message: result };
     } catch (error) {
         return { error: error.message };
