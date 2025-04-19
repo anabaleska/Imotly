@@ -8,7 +8,7 @@ const AdList = () => {
     useEffect(() => {
         const fetchAds = async () => {
             try {
-                const response = await fetch('http://localhost:5000/ads');
+                const response = await fetch('http://localhost:5001/ads');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
@@ -38,7 +38,7 @@ const AdList = () => {
                         <p>Location: {ad.location}</p>
                         <p>Date Posted: {ad.date_posted}</p>
                         {ad.imageurl && <img src={ad.imageurl} alt={ad.title} />}
-                        <a href={ad.link} target="_blank" rel="noopener noreferrer"></a>
+                        <a href={ad.link} target="_blank" rel="noopener noreferrer">View Ad</a>
                     </li>
                 ))}
             </ul>
