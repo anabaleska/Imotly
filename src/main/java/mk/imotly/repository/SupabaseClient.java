@@ -1,5 +1,6 @@
 package mk.imotly.repository;
 import mk.imotly.model.Ad;
+import mk.imotly.model.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
@@ -91,6 +92,22 @@ public class SupabaseClient {
         List<Ad> results = response.getBody();
         System.out.println("Supabase returned: " + results);
         return (results != null && !results.isEmpty()) ? results.get(0) : null;
+    }
+
+    public void addUser(User user) {
+        HttpEntity<User> request = new HttpEntity<>(user, createHeaders());
+
+        ResponseEntity<String> response = restTemplate.postForEntity(
+                supabaseApiUrl + "/users", // your users table
+                request,
+                String.class
+        );
+
+        if (response.getStatusCode() == HttpStatus.CREATED || response.getStatusCode() == HttpStatus.OK) {
+            System.out.println("User successfully added to database.");
+        } else {
+            System.out.println("Failed to add user: " + response.getBody());
+        }
     }
 
 

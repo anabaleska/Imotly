@@ -11,4 +11,5 @@ public interface SupabaseService {
     Ad getAdById(Long id);
 
     Ad getAdByUrl(String url);
+    String registerUser(String email, String password, String name, String surname);
 }

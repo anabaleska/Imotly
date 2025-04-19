@@ -24,6 +24,7 @@ public class ImotlyApplication {
         System.setProperty("DB_USERNAME", dotenv.get("DB_USERNAME"));
         System.setProperty("DB_PASSWORD", dotenv.get("DB_PASSWORD"));
         System.setProperty("SUPABASE_URL", dotenv.get("SUPABASE_URL"));
+        System.setProperty("SUPABASE_API_URL", dotenv.get("SUPABASE_API_URL"));
         System.setProperty("SUPABASE_KEY", dotenv.get("SUPABASE_KEY"));
         System.out.println("DB URL: " + System.getenv("DB_URL"));
         SpringApplication.run(ImotlyApplication.class, args);

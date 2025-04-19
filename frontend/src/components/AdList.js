@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import {fetchAds} from "../api/adApi";
 
 const AdList = () => {
     const [ads, setAds] = useState([]);
@@ -6,13 +7,9 @@ const AdList = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchAds = async () => {
+        const getAds = async () => {
             try {
-                const response = await fetch('http://localhost:5001/ads');
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const data = await response.json();
+                const data = await fetchAds();
                 setAds(data);
             } catch (error) {
                 setError(error.message);
@@ -21,7 +18,7 @@ const AdList = () => {
             }
         };
 
-        fetchAds();
+        getAds();
     }, []);
 
     if (loading) return <div>Loading...</div>;
