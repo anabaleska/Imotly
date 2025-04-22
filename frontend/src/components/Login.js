@@ -18,7 +18,7 @@ const Login = () => {
         } else {
             console.log('User logged in:', user);
 
-           localStorage.setItem('supabase_user', JSON.stringify(user));
+            localStorage.setItem('supabase_user', JSON.stringify(user));
             navigate('/');
         }
     };
@@ -41,11 +41,10 @@ const Login = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                 />
-                {error && <p>{error}</p>}
+                {error && <p style={{color:"red"}}>{error}</p>}
                 <button type="submit">Login</button>
             </form>
         </div>
     );
 };
-
 export default Login;

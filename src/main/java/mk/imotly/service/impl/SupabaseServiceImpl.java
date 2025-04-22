@@ -70,9 +70,6 @@ public class SupabaseServiceImpl implements SupabaseService {
             return "Error registering user: " + signUpResponse.getBody();
         }
 
-
-
-        // Save user to users table
         User user = new User(email, name, surname);
         supabaseClient.addUser(user);
 
