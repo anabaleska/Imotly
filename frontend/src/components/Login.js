@@ -1,12 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { loginUser } from '../api/supabase';
-import { useNavigate } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
+import Register from "./Register";
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(true);
+
+
+
+    useEffect(() => {
+        const user = localStorage.getItem('supabase_user');
+        if (user) {
+            try {
+                const parsedUser = JSON.parse(user);
+                if (parsedUser) {
+                    navigate('/');
+                } else {
+                    setLoading(false); //
+                }
+            } catch (e) {
+                console.error('Error parsing user data:', e);
+                setLoading(false);
+            }
+        } else {
+            setLoading(false);
+        }
+    }, [navigate]);
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -22,6 +45,9 @@ const Login = () => {
             navigate('/');
         }
     };
+    if (loading) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <div>
@@ -44,6 +70,7 @@ const Login = () => {
                 {error && <p style={{color:"red"}}>{error}</p>}
                 <button type="submit">Login</button>
             </form>
+            <p>Don't have an account? <Link to="/register">Register Here!</Link></p>
         </div>
     );
 };

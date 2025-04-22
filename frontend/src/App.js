@@ -3,12 +3,15 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Login from "./components/Login";
 import AdList from "./components/AdList";
 import Register from "./components/Register";
+import Navbar from "./components/Navbar";
 
 function App() {
     return (
         <Router>
             <div>
+                <Navbar />
                 <h1>Welcome to Pazar3 Ads</h1>
+
 
                 {/* Define Routes for different pages */}
                 <Routes>

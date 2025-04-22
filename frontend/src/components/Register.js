@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { registerUser } from '../api/supabase';
-import { useNavigate } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 
 const Register = () => {
     const [email, setEmail] = useState('');
@@ -10,6 +10,26 @@ const Register = () => {
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const user = localStorage.getItem('supabase_user');
+        if (user) {
+            try {
+                const parsedUser = JSON.parse(user);
+                if (parsedUser) {
+                    navigate('/');
+                } else {
+                    setLoading(false);
+                }
+            } catch (e) {
+                console.error('Error parsing user data:', e);
+                setLoading(false);
+            }
+        } else {
+            setLoading(false);
+        }
+    }, [navigate]);
 
     const handleRegister = async (e) => {
         e.preventDefault();
@@ -35,6 +55,9 @@ const Register = () => {
             setError('An unexpected error occurred. Please try again.');
         }
     };
+    if (loading) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <div>
@@ -72,6 +95,7 @@ const Register = () => {
                 {success && <p style={{ color: 'green' }}>{success}</p>}  {/* Display success */}
                 <button type="submit">Register</button>
             </form>
+            <p>Already have an account? <Link to="/login">Login Here!</Link></p>
         </div>
     );
 };
