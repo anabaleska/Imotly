@@ -3,7 +3,19 @@ import { Link, useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
     const navigate = useNavigate();
-    const user = JSON.parse(localStorage.getItem('supabase_user'));
+    let user = null;
+
+    try {
+        const storedUser = localStorage.getItem('supabase_user');
+        // Ensure we never try to parse 'undefined'
+        if (storedUser && storedUser !== 'undefined') {
+            user = JSON.parse(storedUser);
+        }
+    } catch (err) {
+        console.error('Error parsing user from localStorage:', err);
+    }
+
+    console.log(user);
 
     const handleLogout = () => {
         localStorage.removeItem('supabase_user');
