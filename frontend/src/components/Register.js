@@ -38,6 +38,13 @@ const Register = () => {
         setError('');
         setSuccess('');
 
+        console.log("Registering user with:", {
+            email,
+            password,
+            name,
+            surname
+        });
+
         try {
             const response = await registerUser(email, password, name, surname);
 

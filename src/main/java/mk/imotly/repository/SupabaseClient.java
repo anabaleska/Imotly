@@ -31,11 +31,11 @@ public class SupabaseClient {
         return headers;
     }
 
-    public List<Ad> getAds() {
+    public List<Ad> getAds(int page, int size) {
         HttpEntity<Void> entity = new HttpEntity<>(createHeaders());
-
+        String url = supabaseApiUrl + "/ads?limit=" + size + "&offset=" + (page * size);
         ResponseEntity<List<Ad>> response = restTemplate.exchange(
-                supabaseApiUrl + "/ads",
+                url,
                 HttpMethod.GET,
                 entity,
                 new ParameterizedTypeReference<List<Ad>>() {}

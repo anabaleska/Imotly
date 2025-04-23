@@ -5,11 +5,14 @@ const AdList = () => {
     const [ads, setAds] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [page, setPage] = useState(0);
+    const limit = 10;
 
     useEffect(() => {
         const getAds = async () => {
             try {
-                const data = await fetchAds();
+                setLoading(true);
+                const data = await fetchAds(page, limit);
                 setAds(data);
             } catch (error) {
                 setError(error.message);
@@ -19,7 +22,15 @@ const AdList = () => {
         };
 
         getAds();
-    }, []);
+    }, [page]);
+
+    const handlePrev = () => {
+        if (page > 0) setPage(page - 1);
+    };
+
+    const handleNext = () => {
+        setPage(page + 1);
+    };
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
@@ -39,6 +50,11 @@ const AdList = () => {
                     </li>
                 ))}
             </ul>
+            <div style={{ marginTop: "20px" }}>
+                <button onClick={handlePrev} disabled={page === 0}>Previous</button>
+                <span style={{ margin: "0 10px" }}>Page {page + 1}</span>
+                <button onClick={handleNext}>Next</button>
+            </div>
         </div>
     );
 };

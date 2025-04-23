@@ -2,6 +2,8 @@ import { supabase } from './supabaseClient';
 
 
 export const registerUser = async (email, password, name, surname) => {
+    console.log("Form Data Being Sent:", email);
+
     try {
         const response = await fetch('http://localhost:5001/api/auth/register', {
             method: 'POST',

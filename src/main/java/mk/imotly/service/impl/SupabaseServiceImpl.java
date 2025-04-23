@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import mk.imotly.model.Ad;
 import mk.imotly.repository.SupabaseClient;
 import mk.imotly.service.SupabaseService;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -22,6 +23,8 @@ public class SupabaseServiceImpl implements SupabaseService {
 
     @Value("${supabase.api.key}")
     private String supabaseApiKey;
+    @Value("${supabase.api.url}")
+    private String supabaseApiUrl;
 
     private final RestTemplate restTemplate;
 
@@ -33,8 +36,8 @@ public class SupabaseServiceImpl implements SupabaseService {
     }
 
     @Override
-    public List<Ad> getAllAds() {
-        return supabaseClient.getAds();
+    public List<Ad> getAllAds(int page, int size) {
+        return supabaseClient.getAds(page, size);
     }
 
     @Override

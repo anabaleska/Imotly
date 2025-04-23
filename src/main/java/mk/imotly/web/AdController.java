@@ -20,8 +20,10 @@ public class AdController {
     }
 
     @GetMapping
-    public List<Ad> getAllAds() {
-        return supabaseService.getAllAds();
+    public ResponseEntity<List<Ad>> getAllAds(@RequestParam(defaultValue = "0") int page,
+                              @RequestParam(defaultValue = "10") int size) {
+        List<Ad> ads = supabaseService.getAllAds(page, size);
+        return ResponseEntity.ok(ads);
     }
 
     @PostMapping

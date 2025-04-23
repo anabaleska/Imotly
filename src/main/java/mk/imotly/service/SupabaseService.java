@@ -4,7 +4,7 @@ import mk.imotly.model.Ad;
 import java.util.List;
 
 public interface SupabaseService {
-    List<Ad> getAllAds();
+    List<Ad> getAllAds(int page, int size);
 
     void addAd(Ad ad);
 
