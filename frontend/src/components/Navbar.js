@@ -7,7 +7,6 @@ const Navbar = () => {
 
     try {
         const storedUser = localStorage.getItem('supabase_user');
-        // Ensure we never try to parse 'undefined'
         if (storedUser && storedUser !== 'undefined') {
             user = JSON.parse(storedUser);
         }

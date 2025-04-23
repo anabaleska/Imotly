@@ -1,0 +1,26 @@
+.propertyGrid {
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 50px;
+    max-width: none;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 20px;
+    display: flex;
+}
+
+@media (width <= 991px) {
+    .propertyGrid {
+        gap: 30px;
+        max-width: 991px;
+    }
+}
+
+@media (width <= 640px) {
+    .propertyGrid {
+        flex-direction: column;
+        align-items: center;
+        max-width: 640px;
+    }
+}

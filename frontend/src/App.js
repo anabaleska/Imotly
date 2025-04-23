@@ -4,23 +4,20 @@ import Login from "./components/Login";
 import AdList from "./components/AdList";
 import Register from "./components/Register";
 import Navbar from "./components/Navbar";
+import InputDesign from "./components/InputDesign";
+import PropertyGrid from "./components/PropertyGrid";
 
 function App() {
     return (
         <Router>
             <div>
-                <Navbar />
-                <h1>Welcome to Pazar3 Ads</h1>
-
-
-                {/* Define Routes for different pages */}
+                <InputDesign />
                 <Routes>
-                    {/* Route for the login page */}
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
+                    <Route path="/" element={<PropertyGrid />} />
 
-                    {/* Route for the main page, displaying the AdList */}
-                    <Route path="/" element={<AdList />} />
+
 
                 </Routes>
             </div>
