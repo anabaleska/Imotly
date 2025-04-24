@@ -1,6 +1,6 @@
 .form {
     border-radius: 0;
-    max-width: 420px;
+    max-width: 400px;
     font-family:
             Poppins,
             -apple-system,
@@ -12,23 +12,24 @@
 .div {
     background-color: #fff;
     border-radius: 30px;
-    width: 100%;
+    width: 80%;
     padding-bottom: 60px;
     box-shadow: 10px 30px 50px #0000000d;
+
 }
-.div2 {
-    border-bottom: 1px solid var(--Text-Colour-4, #aaa);
-    text-align: center;
-    background-color: #fff;
-    border-radius: 20px 20px 0 0;
-    flex-direction: column;
-    width: 100%;
-    padding-top: 40px;
-    padding-left: 39px;
-    padding-right: 80px;
-    font-weight: 500;
-    display: flex;
-}
+/*.div2 {*/
+/*    border-bottom: 1px solid var(--Text-Colour-4, #aaa);*/
+/*    text-align: center;*/
+/*    background-color: #fff;*/
+/*    border-radius: 20px 20px 0 0;*/
+/*    flex-direction: column;*/
+/*    width: 100%;*/
+/*    padding-top: 40px;*/
+/*    padding-left: 39px;*/
+/*    padding-right: 80px;*/
+/*    font-weight: 500;*/
+/*    display: flex;*/
+/*}*/
 .div3 {
     justify-content: space-between;
     align-self: center;
@@ -71,7 +72,7 @@
 .div4 {
     flex-direction: column;
     align-items: stretch;
-    width: 100%;
+    width: 80%;
     margin-top: 50px;
     padding-left: 40px;
     padding-right: 40px;
@@ -86,10 +87,14 @@
     background-color: #d4d4d433;
     border-radius: 20px;
     padding: 24px 20px;
-    width: 100%;
+    width: 85%;
     border: none;
     font-size: inherit;
     font-family: inherit;
+    display: flex;
+    align-items: center;
+    margin-top: 40px;
+    height: 5px;
 }
 .div5 {
     color: #6d6a75;

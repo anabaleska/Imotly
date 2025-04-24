@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import styles from "./Rectangle.css";
+import styles from "./Rectangle.module.css";
 
 function Rectangle() {
     return (
