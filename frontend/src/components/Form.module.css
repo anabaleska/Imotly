@@ -1,0 +1,182 @@
+.form {
+    border-radius: 0;
+    max-width: 420px;
+    font-family:
+            Poppins,
+            -apple-system,
+            Roboto,
+            Helvetica,
+            sans-serif;
+    font-size: 16px;
+}
+.div {
+    background-color: #fff;
+    border-radius: 30px;
+    width: 100%;
+    padding-bottom: 60px;
+    box-shadow: 10px 30px 50px #0000000d;
+}
+.div2 {
+    border-bottom: 1px solid var(--Text-Colour-4, #aaa);
+    text-align: center;
+    background-color: #fff;
+    border-radius: 20px 20px 0 0;
+    flex-direction: column;
+    width: 100%;
+    padding-top: 40px;
+    padding-left: 39px;
+    padding-right: 80px;
+    font-weight: 500;
+    display: flex;
+}
+.div3 {
+    justify-content: space-between;
+    align-self: center;
+    align-items: stretch;
+    gap: 20px;
+    width: 255px;
+    max-width: 100%;
+    display: flex;
+}
+.forSale {
+    color: #3a0ca3;
+    leading-trim: both;
+    text-edge: cap;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: inherit;
+    font-size: inherit;
+}
+.forRent {
+    color: gray;
+    leading-trim: both;
+    text-edge: cap;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: inherit;
+    font-size: inherit;
+}
+.img {
+    aspect-ratio: 50;
+    object-fit: contain;
+    object-position: center;
+    stroke-width: 3px;
+    stroke: #3a0ca3;
+    width: 153px;
+    max-width: 100%;
+    margin-top: 26px;
+}
+.div4 {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    margin-top: 50px;
+    padding-left: 40px;
+    padding-right: 40px;
+    font-weight: 400;
+    line-height: 2;
+    display: flex;
+}
+.newYorkSanFranciscoetc {
+    leading-trim: both;
+    text-edge: cap;
+    color: #aaa;
+    background-color: #d4d4d433;
+    border-radius: 20px;
+    padding: 24px 20px;
+    width: 100%;
+    border: none;
+    font-size: inherit;
+    font-family: inherit;
+}
+.div5 {
+    color: #6d6a75;
+    background-color: #d4d4d433;
+    border-radius: 20px;
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 20px;
+    margin-top: 30px;
+    padding: 22px;
+    display: flex;
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    font-size: inherit;
+    font-family: inherit;
+}
+.selectPropertyType {
+    leading-trim: both;
+    text-edge: cap;
+}
+.img2 {
+    aspect-ratio: 2.33;
+    object-fit: contain;
+    object-position: center;
+    fill: #aaa;
+    flex-shrink: 0;
+    width: 14px;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+.div6 {
+    color: #6d6a75;
+    background-color: #d4d4d433;
+    border-radius: 20px;
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 20px;
+    margin-top: 30px;
+    padding: 24px 22px;
+    display: flex;
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    font-size: inherit;
+    font-family: inherit;
+}
+.selectRooms {
+    leading-trim: both;
+    text-edge: cap;
+}
+.img3 {
+    aspect-ratio: 2.33;
+    object-fit: contain;
+    object-position: center;
+    fill: #aaa;
+    flex-shrink: 0;
+    width: 14px;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+.advanceSearch {
+    color: #3a0ca3;
+    text-align: right;
+    leading-trim: both;
+    text-edge: cap;
+    align-self: start;
+    margin-top: 22px;
+    margin-left: 24px;
+    font-size: 13px;
+    line-height: 2;
+    text-decoration: none;
+}
+.search {
+    leading-trim: both;
+    text-edge: cap;
+    color: #fff;
+    white-space: nowrap;
+    text-align: center;
+    background-color: #3a0ca3;
+    border: 1px solid #bfbdc1;
+    border-radius: 50px;
+    margin-top: 64px;
+    padding: 25px 70px 25px 85px;
+    font-weight: 500;
+    width: 100%;
+    cursor: pointer;
+    font-size: inherit;
+    font-family: inherit;
+}

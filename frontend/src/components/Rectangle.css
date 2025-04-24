@@ -1,0 +1,24 @@
+.gradientBackground {
+    background: linear-gradient(#4cc9f000 0%, #4361ee4d 100%);
+    border-radius: 0 0 800px 800px;
+    flex-shrink: 0;
+    width: 100%;
+    height: 902px;
+    position: absolute;
+    top: 40px;
+    left: 0;
+}
+
+@media (max-width: 991px) {
+    .gradientBackground {
+        border-radius: 0 0 600px 600px;
+        height: 700px;
+    }
+}
+
+@media (max-width: 640px) {
+    .gradientBackground {
+        border-radius: 0 0 400px 400px;
+        height: 500px;
+    }
+}
