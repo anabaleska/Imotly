@@ -6,7 +6,6 @@ const NavigationMenu = () => {
     return (
         <nav className={styles.navigationMenu}>
             <Link to="/" className={styles.navItem}>Home</Link>
-            {/*<button className={styles.navItem}>Listings</button>*/}
         </nav>
     );
 };
