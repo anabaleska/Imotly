@@ -20,15 +20,15 @@ function App() {
                     <Route path="/register" element={<Register />} />
                     <Route path="/" element={
                         <>
-                            <Rectangle />
-                            <div style={{ display: 'flex', gap: '5px', padding: '30px',  }}>
-                                <div style={{ flex: 1}}>
-                                    <Form />
-                                </div>
-                                <div style={{ flex: 1 }}>
-                                    <Carousel />
-                                </div>
-                            </div>
+                            {/*<Rectangle />*/}
+                            {/*<div style={{ display: 'flex', gap: '5px', padding: '30px',  }}>*/}
+                            {/*    <div style={{ flex: 1}}>*/}
+                            {/*        <Form />*/}
+                            {/*    </div>*/}
+                            {/*    <div style={{ flex: 1 }}>*/}
+                            {/*        <Carousel />*/}
+                            {/*    </div>*/}
+                            {/*</div>*/}
                             <PropertyGrid />
                         </>
                     } />

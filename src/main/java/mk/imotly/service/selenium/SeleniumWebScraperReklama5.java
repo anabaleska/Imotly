@@ -78,8 +78,8 @@ public class SeleniumWebScraperReklama5 {
                     if (existingAd != null) {
                         System.out.println("Ad already exists: " + title);
                     } else {
-                        Ad ad = new Ad(title, price, location, datePosted, link, "Reklama5", imageUrl);
-                        supabaseService.addAd(ad);
+//                        Ad ad = new Ad(title, price, location, datePosted, link, "Reklama5", imageUrl);
+//                        supabaseService.addAd(ad);
                         System.out.println("Ad successfully saved to database: " + title);
                     }
                 }
