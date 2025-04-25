@@ -10,7 +10,8 @@ import java.time.LocalDate;
 public class Ad {
     private Long id;
     private String title;
-    private String price;
+    private Integer price;
+
     private String location;
     @JsonProperty("date_posted")
     LocalDate datePosted;
@@ -46,7 +47,7 @@ public class Ad {
     public Ad() {
     }
 
-    public Ad(String title, String price, String location, LocalDate datePosted, String url, String source, String imageUrl, Integer numRooms, Integer floor, Integer numFloors, Integer size, String heating, String typeOfObj,  String state, Boolean forSale, Boolean terrace, Boolean parking, Boolean furnished, Boolean basement, Boolean newBuilding, Boolean duplex, Boolean renovated, Boolean lift) {
+    public Ad(String title, Integer price, String location, LocalDate datePosted, String url, String source, String imageUrl, Integer numRooms, Integer floor, Integer numFloors, Integer size, String heating, String typeOfObj,  String state, Boolean forSale, Boolean terrace, Boolean parking, Boolean furnished, Boolean basement, Boolean newBuilding, Boolean duplex, Boolean renovated, Boolean lift) {
         this.title = title;
         this.price = price;
         this.location = location;
@@ -71,7 +72,7 @@ public class Ad {
         this.duplex = duplex;
         this.renovated = renovated;
         this.lift = lift;
-        if( forSale == false){
+        if(!forSale){
             if(title.toLowerCase().contains("prodava") || title.toLowerCase().contains("продава") ){
                 forSale = true;
             }
@@ -95,11 +96,11 @@ public class Ad {
         this.title = title;
     }
 
-    public String getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 

@@ -5,26 +5,44 @@ import mk.imotly.config.SpringConfig;
 import mk.imotly.model.Ad;
 import mk.imotly.service.SupabaseService;
 import org.openqa.selenium.By;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import java.util.List;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
 
 public class SeleniumWebScraperReklama5 {
     private final SupabaseService supabaseService;
-    //private static boolean CHECK_ONLY_FIRST_PAGE = true;
-
     public SeleniumWebScraperReklama5(SupabaseService supabaseService) {
         this.supabaseService = supabaseService;
     }
+
+    private static LocalDate parseDate(String datePosted) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale.ENGLISH);
+        try {
+            return LocalDate.parse(datePosted, formatter);
+        } catch (DateTimeParseException e) {
+            System.out.println("Invalid date format: " + datePosted);
+            return null;
+        }
+    }
+
+    private Optional<Integer> extractIntFromText(String text) {
+        Matcher matcher = Pattern.compile("(\\d+)").matcher(text);
+        return matcher.find() ? Optional.of(Integer.parseInt(matcher.group(1))) : Optional.empty();
+    }
+
     public void scrapeReklama5() {
-        boolean checkOnlyFirstPage = true;
+        boolean checkOnlyFirstPage = false;
         WebDriverManager.chromedriver().driverVersion("135.0.7049.85").setup();
         WebDriver driver = new ChromeDriver();
 
@@ -39,50 +57,113 @@ public class SeleniumWebScraperReklama5 {
                 String pageUrl = baseUrl + "&page=" + pageCount;
                 driver.get(pageUrl);
                 List<WebElement> listings = driver.findElements(By.className("ad-top-div"));
-
+                List<String> links = new ArrayList<>();
                 for (WebElement listing : listings) {
-                    String title = listing.findElement(By.className("SearchAdTitle")).getText();
-                    String price = listing.findElement(By.className("search-ad-price")).getText();
-                    String location = listing.findElement(By.className("city-span")).getText();
-                    String link = listing.findElement(By.className("SearchAdTitle")).getAttribute("href");
-                    WebElement dateDiv = listing.findElement(By.className("ad-date-div-1"));
-                    String datePosted = "непознато";
+                    try {
+                        String link = listing.findElement(By.className("SearchAdTitle")).getAttribute("href");
+                        if (link != null && !link.isEmpty()) {
+                            links.add(link);
+                        }
+                    } catch (StaleElementReferenceException e) {
+                        System.out.println("Stale element while collecting links. Skipping...");
+                    }
+                }
 
+                for (String link : links) {
+                    Integer numRooms = null;
+                    Integer floor = null;
+                    Integer numFloors = null;
+                    Integer size = null;
+                    String heating = null;
+                    String state = null;
 
-                    List<WebElement> spanElements = dateDiv.findElements(By.tagName("span"));
-                    if (!spanElements.isEmpty()) {
-                        datePosted = spanElements.get(0).getText().trim();
+                    Boolean forSale = false;
+                    Boolean terrace = null;
+                    Boolean lift = null;
+                    Boolean parking = null;
+                    Boolean furnished = null;
+                    Boolean basement = null;
+                    Boolean newBuilding = null;
+                    Boolean duplex = null;
+                    Boolean renovated = null;
+                    driver.get(link);
+                    Thread.sleep(3000);
+
+                    String title = driver.findElement(By.className("card-title")).getText();
+                    String priceText = driver.findElement(By.className("defaultBlue")).getText();
+                    Integer price=null;
+                    price=extractIntFromText(priceText).get();
+                    if(priceText.toLowerCase().contains("mkd")||priceText.toLowerCase().contains("мкд")||priceText.toLowerCase().contains("ден")) {
+                        price/=60;
+                    }
+
+                    WebElement dateElement = driver.findElement(By.xpath("//div[@class='col-4 align-self-center']//div[@style='float:left']//small"));
+                    String datePosted = dateElement.getText().split(" ")[0];
+                    WebElement cityElement = driver.findElement(By.xpath("//div[@class='col-4 align-self-center']//p"));
+                    String location = cityElement.getText();
+                    LocalDate date;
+                    if (datePosted.toLowerCase().contains("денес")) date = LocalDate.now();
+                    else if (datePosted.toLowerCase().contains("вчера")) date = LocalDate.now().minusDays(1);
+                    else date = parseDate(datePosted);
+                    String typeOfObj = driver.findElement(By.id("categoryDiv")).getText().toLowerCase().contains("станови") ? "Стан" : "Куќа/Вила";
+                    List<WebElement> imageElements = driver.findElements(By.cssSelector(".ad-image img"));
+                    String imageUrl;
+                    if(imageElements.isEmpty()){
+                        imageUrl = "https://img.freepik.com/premium-vector/no-photo-available-vector-icon-default-image-symbol-picture-coming-soon-web-site-mobile-app_87543-18055.jpg";
                     } else {
-                        String fullText = dateDiv.getText().trim();
-                        if (!fullText.isEmpty()) {
-                            String[] lines = fullText.split("\n");
-                            if (lines.length > 0) {
-                                datePosted = lines[0].trim();
-                            }
-                        }
-                    }
-                    WebElement imageDiv = listing.findElement(By.className("ad-image"));
-                    String styleAttr = imageDiv.getAttribute("style");
+                     imageUrl = imageElements.get(0).getAttribute("src");}
 
-                    String imageUrl = "";
 
-                    Pattern pattern = Pattern.compile("url\\((.*?)\\)");
-                    Matcher matcher = pattern.matcher(styleAttr);
-                    if (matcher.find()) {
-                        imageUrl = matcher.group(1).replaceAll("\"", ""); // трга наводници
-                        if (imageUrl.startsWith("//")) {
-                            imageUrl = "https:" + imageUrl;
-                        }
+                    WebElement card = driver.findElement(By.className("card"));
+                    WebElement rowContainer = card.findElement(By.cssSelector(".row.mt-3"));
+
+                    List<WebElement> allCols = rowContainer.findElements(By.xpath("./div"));
+
+                    for (int i = 0; i < allCols.size() - 1; i += 2) {
+                        WebElement labelElement = allCols.get(i);
+                        WebElement valueElement = allCols.get(i + 1);
+
+                        String label = labelElement.getText().toLowerCase();
+                        String value = valueElement.getText().toLowerCase();
+
+                        if (label.contains("број на соби:")) {
+                            numRooms = extractIntFromText(value).orElse(null);
+                        } else if (label.contains("квадратура:")) {
+                            size = extractIntFromText(value).orElse(null);
+                        } else if (label.contains("греење:")) {
+                            heating = value;
+                        } else if (label.contains("состојба:")) {
+                            state = value;
+                        } else if (label.contains("спрат:")) {
+                            floor = extractIntFromText(value).orElse(null);
+                        } else if (label.contains("број на спратови:")) {
+                            numFloors = extractIntFromText(value).orElse(null);
+                        } else if (label.contains("вид на оглас")) {
+                            forSale = value.contains("се продава");
+                        } else if (label.contains("број на паркинг/гаража:"))
+                            parking = !value.equals("нема");
+                        else if (label.contains("опрема:"))
+                            furnished = value.contains("наместен");
+                        else if (label.contains("број на балкони"))
+                            terrace = !value.equals("нема");
+                        else if (label.contains("лифт"))
+                            lift = !value.contains("не");
+                        else if (label.contains("подрум"))
+                            basement = value.contains("да");
+                        if (value.contains("дуплекс")) duplex = true;
                     }
+
+
                     Ad existingAd = supabaseService.getAdByUrl(link);
                     if (existingAd != null) {
                         System.out.println("Ad already exists: " + title);
                     } else {
-//                        Ad ad = new Ad(title, price, location, datePosted, link, "Reklama5", imageUrl);
-//                        supabaseService.addAd(ad);
+                        Ad ad = new Ad(title, price, location, date, link, "Reklama5.mk", imageUrl, numRooms, floor, numFloors, size, heating, typeOfObj, state, forSale, terrace, parking, furnished, basement, newBuilding, duplex, renovated, lift);
+                        supabaseService.addAd(ad);
                         System.out.println("Ad successfully saved to database: " + title);
                     }
                 }
+
                 try {
                     WebElement cookiesBanner = driver.findElement(By.cssSelector("#cookiePopup"));
                     if (cookiesBanner.isDisplayed()) {
@@ -98,7 +179,7 @@ public class SeleniumWebScraperReklama5 {
                     System.out.println("Checking only the first page. Stopping here.");
                     break;
                 }
-
+                driver.get(pageUrl);
                 List<WebElement> pageNumbers = driver.findElements(By.className("page-link"));
                 if (pageNumbers.size() > 0) {
 
@@ -109,12 +190,13 @@ public class SeleniumWebScraperReklama5 {
                     pageCount++;
                 } else {
                     System.out.println("No more pages to scrape.");
+                    checkOnlyFirstPage = true;
                     break;
                 }
 
 
                 Thread.sleep(5000);
-          }
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {

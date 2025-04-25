@@ -4,6 +4,7 @@ import mk.imotly.config.SpringConfig;
 import mk.imotly.model.Ad;
 import mk.imotly.service.SupabaseService;
 import org.openqa.selenium.By;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -25,11 +26,22 @@ import java.util.regex.Pattern;
 public class SeleniumWebScraperPazar3 {
 
 
-    private Optional<Integer> extractIntFromText(String text) {
-        Matcher matcher = Pattern.compile("(\\d+)").matcher(text);
-        return matcher.find() ? Optional.of(Integer.parseInt(matcher.group(1))) : Optional.empty();
-    }
+    public static Optional<Integer> extractIntFromText(String text) {
 
+        String cleanedText = text.replaceAll("[^\\d]", "");
+
+
+        if (!cleanedText.isEmpty()) {
+            try {
+                return Optional.of(Integer.parseInt(cleanedText));
+            } catch (NumberFormatException e) {
+
+                return Optional.empty();
+            }
+        }
+
+        return Optional.empty();
+    }
 
     private final SupabaseService supabaseService;
 
@@ -60,9 +72,7 @@ public class SeleniumWebScraperPazar3 {
             }
         }
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
-        String[] parts = datePosted.split(" ");
-        datePosted= parts[0] + " " + parts[1]+" "+LocalDate.now().getYear();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd yyyy", Locale.ENGLISH);
 
         try {
             return LocalDate.parse(datePosted, formatter);
@@ -85,22 +95,20 @@ public class SeleniumWebScraperPazar3 {
                 Thread.sleep(5000);
 
                 List<WebElement> listings = driver.findElements(By.className("row-listing"));
-
+                List<String> links = new ArrayList<>();
                 for (WebElement listing : listings) {
+                    try {
+                        String link = listing.findElement(By.className("Link_vis")).getAttribute("href");
+                        if (link != null && !link.isEmpty()) {
+                            links.add(link);
+                        }
+                    } catch (StaleElementReferenceException e) {
+                        System.out.println("Stale element while collecting links. Skipping...");
+                    }
+                }
 
-                    String title = listing.findElement(By.className("Link_vis")).getText();
-                    String price = listing.findElement(By.className("list-price")).getText();
-                    String location = listing.findElement(By.className("link-html")).getText();
-                    String link = listing.findElement(By.className("Link_vis")).getAttribute("href");
-                    String datePosted = listing.findElement(By.className("ci-text-right")).getText();
-                    LocalDate date;
-                    if(datePosted.toLowerCase().contains("денес")) date=LocalDate.now();
-                    else if (datePosted.toLowerCase().contains("вчера")) date=LocalDate.now().minusDays(1);
-                    else date=parseDate(datePosted);
-
-                    List<WebElement> images = listing.findElements(By.className("ProductionImg"));
-                    String imageUrl = images.isEmpty() ? "No image available" : images.get(0).getAttribute("data-src");
-                    String typeOfObj = listing.findElement(By.className("link-html5")).getText().equalsIgnoreCase("станови") ? "Стан" : "Куќа/Вила";
+                for (String link : links) {
+                    String location = null;
                     Integer numRooms = null;
                     Integer floor = null;
                     Integer numFloors = null;
@@ -108,94 +116,113 @@ public class SeleniumWebScraperPazar3 {
                     String heating = null;
                     String state = null;
 
-                    Boolean forSale=null;
+                    Boolean forSale = false;
                     Boolean terrace = null;
                     Boolean lift = null;
-                    Boolean parking=null;
-                    Boolean furnished=null;
-                    Boolean basement=null;
-                    Boolean newBuilding=null;
-                    Boolean duplex=null;
-                    Boolean renovated=null;
+                    Boolean parking = null;
+                    Boolean furnished = null;
+                    Boolean basement = null;
+                    Boolean newBuilding = null;
+                    Boolean duplex = null;
+                    Boolean renovated = null;
+                    driver.get(link);
+                    Thread.sleep(3000);
 
-                    if (link != null && !link.isEmpty()) {
-                        driver.get(link);
-                        Thread.sleep(1000);
-                        List<WebElement> details= driver.findElements(By.className("tag-item"));
-                        for (WebElement detail : details) {
-                            String label = detail.findElement(By.tagName("span")).getText().toLowerCase();
-                            String value = detail.findElement(By.tagName("bdi")) != null ? detail.findElement(By.tagName("bdi")).getText().toLowerCase() : "";
-                            if (label.contains("број на соби:")) {
-                                numRooms = extractIntFromText(value).get();
-                            } else if (label.contains("површина:")) {
-                                size = extractIntFromText(value).get();
-                            }  else if (label.contains("греење:")) {
-                                heating = value;
-                            } else if (label.contains("состојба:")) {
-                                state = value;
-                            } else if (label.contains("спрат:")) {
-                                floor = extractIntFromText(value).get();
-                            }else if (label.contains("број на спратови:")) {
-                                numFloors = extractIntFromText(value).get();
-                            }
-                            else if (label.contains("локација:")) {
-                                location=value;
-                            }
-                            else if (label.contains("вид на оглас:")) {
-                                forSale= value.contains("се продава");
-                            }
-                            else if(label.contains("за живеалиштето:")) {
-                                if(value.contains("паркинг простор")) {
-                                    parking=true;
-                                }
-                                else if(value.contains("нова градба")) {
-                                    newBuilding=true;
-                                }
-                                else if(value.contains("реновиран")) {
-                                    renovated=true;
-                                }
-                                else if(value.contains("наместен")) {
-                                    furnished=true;
-                                }
-                                else if(value.contains("балкон")) {
-                                    terrace=true;
-                                }
-                                else if(value.contains("лифт")) {
-                                    lift=true;
-                                }
-                                else if(value.contains("подрум")) {
-                                    basement=true;
-                                }
-                                else if(value.contains("дуплекс")) {
-                                    duplex=true;
-                                }
-
-                            }
-
-
+                    String title = driver.findElement(By.tagName("h1")).getText();
+                    List<WebElement> priceElements = driver.findElements(By.cssSelector(".new-price"));
+                    String priceText = null;
+                    Integer price=null;
+                    if (!priceElements.isEmpty()) {
+                        priceText = priceElements.get(0).getText();
+                        price=extractIntFromText(priceText).get();
+                        if(priceText.toLowerCase().contains("mkd")||priceText.toLowerCase().contains("мкд")||priceText.toLowerCase().contains("ден")) {
+                        price/=60;
                         }
-                        }
-                    Ad existingAd = supabaseService.getAdByUrl(link);
-                    if (existingAd != null) {
-                        System.out.println("Ad already exists: " + title);
+
                     } else {
-                        try {
-                           Ad ad = new Ad(title,price, location,  date, link, "Pazar3.mk", imageUrl, numRooms,  floor,  numFloors, size,  heating, typeOfObj, state,  forSale,  terrace, parking, furnished,  basement, newBuilding, duplex,  renovated,  lift);
-                            supabaseService.addAd(ad);
-                            System.out.println("Ad successfully saved: " + title);
-                        } catch (Exception e) {
-                            if (e.getMessage().contains("409")) {
-                                System.out.println("Conflict (409): Ad already exists in the database: " + title);
-                            } else {
-                                System.out.println("Failed to save ad: " + title);
-                                e.printStackTrace();
+                        System.out.println("Price not found for this ad.");
+                    }
+
+
+                    String datePosted = driver.findElement(By.className("published-date")).getText();
+                    LocalDate date;
+                    if (datePosted.toLowerCase().contains("денес")) date = LocalDate.now();
+                    else if (datePosted.toLowerCase().contains("вчера")) date = LocalDate.now().minusDays(1);
+                    else date = parseDate(datePosted);
+                    String typeOfObj = driver.findElement(By.className("breadcrumbs")).getText().toLowerCase().contains("станови") ? "Стан" : "Куќа/Вила";
+                    List<WebElement> imageElements = driver.findElements(By.className("custom-photo-link"));
+                    String imageUrl;
+                    if(imageElements.isEmpty()){
+                        imageUrl = "https://img.freepik.com/premium-vector/no-photo-available-vector-icon-default-image-symbol-picture-coming-soon-web-site-mobile-app_87543-18055.jpg";
+                    } else {
+                        imageUrl = imageElements.get(0).getAttribute("href");
+                    }
+
+
+                    List<WebElement> details = driver.findElements(By.className("tag-item"));
+                    for (WebElement detail : details) {
+                        String label = detail.findElement(By.tagName("span")).getText().toLowerCase();
+                        String value = detail.findElement(By.tagName("bdi")) != null ? detail.findElement(By.tagName("bdi")).getText().toLowerCase() : "";
+                        if (label.contains("број на соби:")) {
+                            numRooms = extractIntFromText(value).get();
+                        } else if (label.contains("површина:")) {
+                            size = extractIntFromText(value).get();
+                        } else if (label.contains("греење:")) {
+                            heating = value;
+                        } else if (label.contains("состојба:")) {
+                            state = value;
+                        } else if (label.contains("спрат:")) {
+                            floor = extractIntFromText(value).get();
+                        } else if (label.contains("број на спратови:")) {
+                            numFloors = extractIntFromText(value).get();
+                        } else if (label.contains("локација:")) {
+                            location = value;
+                        } else if (label.contains("вид на оглас:")) {
+                            forSale = value.contains("се продава");
+                        } else if (label.contains("за живеалиштето:")) {
+                            if (value.contains("паркинг простор")) {
+                                parking = true;
+                            } else if (value.contains("нова градба")) {
+                                newBuilding = true;
+                            } else if (value.contains("реновиран")) {
+                                renovated = true;
+                            } else if (value.contains("наместен")) {
+                                furnished = true;
+                            } else if (value.contains("балкон")) {
+                                terrace = true;
+                            } else if (value.contains("лифт")) {
+                                lift = true;
+                            } else if (value.contains("подрум")) {
+                                basement = true;
+                            } else if (value.contains("дуплекс")) {
+                                duplex = true;
                             }
+
+                        }
+
+
+                    }
+
+                Ad existingAd = supabaseService.getAdByUrl(link);
+                if (existingAd != null) {
+                    System.out.println("Ad already exists: " + title);
+                } else {
+                    try {
+                        Ad ad = new Ad(title, price, location, date, link, "Pazar3.mk", imageUrl, numRooms, floor, numFloors, size, heating, typeOfObj, state, forSale, terrace, parking, furnished, basement, newBuilding, duplex, renovated, lift);
+                        supabaseService.addAd(ad);
+                        System.out.println("Ad successfully saved: " + title);
+                    } catch (Exception e) {
+                        if (e.getMessage().contains("409")) {
+                            System.out.println("Conflict (409): Ad already exists in the database: " + title);
+                        } else {
+                            System.out.println("Failed to save ad: " + title);
+                            e.printStackTrace();
                         }
                     }
-                    driver.get(pageUrl);
-                    Thread.sleep(5000);
-
                 }
+
+                Thread.sleep(5000);
+            }
 
                 try {
                     WebElement cookiesBanner = driver.findElement(By.cssSelector(".cookies-area.active"));
@@ -212,6 +239,8 @@ public class SeleniumWebScraperPazar3 {
                     System.out.println("Checking only the first page. Stopping here.");
                     break;
                 }
+
+                driver.get(pageUrl);
                 List<WebElement> pageNumbers = driver.findElements(By.cssSelector(".pagination ul li.prevnext a"));
                 if (pageNumbers.size() > 0) {
                     WebElement nextPage = pageNumbers.get(0);
@@ -226,9 +255,10 @@ public class SeleniumWebScraperPazar3 {
 
                 Thread.sleep(5000);
             }
-        } catch (InterruptedException e) {
+        } catch (InterruptedException | NoSuchElementException e ) {
             e.printStackTrace();
-        } finally {
+        } finally
+        {
             driver.quit();
         }
     }
