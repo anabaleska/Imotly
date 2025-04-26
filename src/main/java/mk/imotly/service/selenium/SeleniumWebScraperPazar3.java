@@ -82,7 +82,7 @@ public class SeleniumWebScraperPazar3 {
         } }
 
     public void scrapePazar3() {
-        boolean checkOnlyFirstPage = false;
+        boolean checkOnlyFirstPage = true;
         WebDriverManager.chromedriver().driverVersion("135.0.7049.85").setup();
         WebDriver driver = new ChromeDriver();
 
@@ -144,11 +144,22 @@ public class SeleniumWebScraperPazar3 {
                     }
 
 
-                    String datePosted = driver.findElement(By.className("published-date")).getText();
-                    LocalDate date;
-                    if (datePosted.toLowerCase().contains("денес")) date = LocalDate.now();
-                    else if (datePosted.toLowerCase().contains("вчера")) date = LocalDate.now().minusDays(1);
-                    else date = parseDate(datePosted);
+                    List<WebElement> dateElements = driver.findElements(By.className("published-date"));
+                    LocalDate date = null;
+
+                    if (!dateElements.isEmpty()) {
+                        String datePosted = dateElements.get(0).getText();
+                        if (datePosted.toLowerCase().contains("денес")) {
+                            date = LocalDate.now();
+                        } else if (datePosted.toLowerCase().contains("вчера")) {
+                            date = LocalDate.now().minusDays(1);
+                        } else {
+                            date = parseDate(datePosted);
+                        }
+                    } else {
+                        System.out.println("No published-date found for ad: " + link);
+                        continue;
+                    }
                     String typeOfObj = driver.findElement(By.className("breadcrumbs")).getText().toLowerCase().contains("станови") ? "Стан" : "Куќа/Вила";
                     List<WebElement> imageElements = driver.findElements(By.className("custom-photo-link"));
                     String imageUrl;

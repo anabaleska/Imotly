@@ -33,7 +33,7 @@ public class SupabaseClient {
 
     public List<Ad> getAds(int page, int size) {
         HttpEntity<Void> entity = new HttpEntity<>(createHeaders());
-        String url = supabaseApiUrl + "/ads?limit=" + size + "&offset=" + (page * size);
+        String url = supabaseApiUrl + "/ads?order=date_posted.desc&limit=" + size + "&offset=" + (page * size);
         ResponseEntity<List<Ad>> response = restTemplate.exchange(
                 url,
                 HttpMethod.GET,
@@ -43,6 +43,7 @@ public class SupabaseClient {
 
         return response.getBody();
     }
+
 
     public void addAd(Ad ad) {
 
@@ -111,5 +112,35 @@ public class SupabaseClient {
     }
 
 
+    public List<Ad> searchAds(Boolean forSale, Integer minPrice, Integer maxPrice, Integer minSize, Integer maxSize, Boolean lift, Boolean basement) {
+        StringBuilder urlBuilder = new StringBuilder(supabaseApiUrl + "/ads?");
 
+        if (forSale != null) urlBuilder.append("forSale=eq.").append(forSale).append("&");
+        if (minPrice != null) urlBuilder.append("price=gte.").append(minPrice).append("&");
+        if (maxPrice != null) urlBuilder.append("price=lte.").append(maxPrice).append("&");
+        if (minSize != null) urlBuilder.append("size=gte.").append(minSize).append("&");
+        if (maxSize != null) urlBuilder.append("size=lte.").append(maxSize).append("&");
+        if (lift != null) urlBuilder.append("lift=is.").append(lift).append("&");
+        if (basement != null) urlBuilder.append("basement=is.").append(basement).append("&");
+
+        String url = urlBuilder.toString();
+        if (url.endsWith("&")) {
+            url = url.substring(0, url.length() - 1);
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("apikey", supabaseApiKey);
+        headers.set("Authorization", "Bearer " + supabaseApiKey);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        ResponseEntity<List<Ad>> response = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                entity,
+                new ParameterizedTypeReference<List<Ad>>() {}
+        );
+
+        return response.getBody();
+    }
 }

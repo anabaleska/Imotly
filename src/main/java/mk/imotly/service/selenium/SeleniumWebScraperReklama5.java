@@ -42,7 +42,7 @@ public class SeleniumWebScraperReklama5 {
     }
 
     public void scrapeReklama5() {
-        boolean checkOnlyFirstPage = false;
+        boolean checkOnlyFirstPage = true;
         WebDriverManager.chromedriver().driverVersion("135.0.7049.85").setup();
         WebDriver driver = new ChromeDriver();
 
@@ -204,7 +204,6 @@ public class SeleniumWebScraperReklama5 {
                     pageCount++;
                 } else {
                     System.out.println("No more pages to scrape.");
-                    checkOnlyFirstPage = true;
                     break;
                 }
 

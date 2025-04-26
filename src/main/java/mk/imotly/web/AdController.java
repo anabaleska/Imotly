@@ -40,4 +40,18 @@ public class AdController {
         }
         return ResponseEntity.ok(ad);
     }
+
+    @GetMapping("/ads/search")
+    public List<Ad> searchAds(
+            @RequestParam(required = false) Boolean forSale,
+            @RequestParam(required = false) Integer minPrice,
+            @RequestParam(required = false) Integer maxPrice,
+            @RequestParam(required = false) Integer minSize,
+            @RequestParam(required = false) Integer maxSize,
+            @RequestParam(required = false) Boolean lift,
+            @RequestParam(required = false) Boolean basement
+    ) {
+        return supabaseService.searchAds(forSale, minPrice, maxPrice, minSize, maxSize, lift, basement);
+    }
+
 }

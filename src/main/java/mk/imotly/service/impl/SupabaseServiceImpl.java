@@ -13,6 +13,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -78,5 +80,11 @@ public class SupabaseServiceImpl implements SupabaseService {
 
         return "User registered and saved successfully.";
     }
+
+    @Override
+    public List<Ad> searchAds(Boolean forSale, Integer minPrice, Integer maxPrice, Integer minSize, Integer maxSize, Boolean lift, Boolean basement) {
+        return supabaseClient.searchAds(forSale, minPrice, maxPrice, minSize, maxSize, lift, basement);
+    }
+
 
 }
