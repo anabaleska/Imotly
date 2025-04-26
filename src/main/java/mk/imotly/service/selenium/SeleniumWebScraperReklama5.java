@@ -125,44 +125,48 @@ public class SeleniumWebScraperReklama5 {
 
 
                     WebElement card = driver.findElement(By.className("card"));
-                    WebElement rowContainer = card.findElement(By.cssSelector(".row.mt-3"));
+                    List<WebElement> rowContainers = card.findElements(By.cssSelector(".row.mt-3"));
 
-                    List<WebElement> allCols = rowContainer.findElements(By.xpath("./div"));
+                    if (rowContainers.isEmpty()) {
+                        continue;
+                    } else {
+                        WebElement rowContainer = rowContainers.get(0);
+                        List<WebElement> allCols = rowContainer.findElements(By.xpath("./div"));
 
-                    for (int i = 0; i < allCols.size() - 1; i += 2) {
-                        WebElement labelElement = allCols.get(i);
-                        WebElement valueElement = allCols.get(i + 1);
+                        for (int i = 0; i < allCols.size() - 1; i += 2) {
+                            WebElement labelElement = allCols.get(i);
+                            WebElement valueElement = allCols.get(i + 1);
 
-                        String label = labelElement.getText().toLowerCase();
-                        String value = valueElement.getText().toLowerCase();
+                            String label = labelElement.getText().toLowerCase();
+                            String value = valueElement.getText().toLowerCase();
 
-                        if (label.contains("број на соби:")) {
-                            numRooms = extractIntFromText(value).orElse(null);
-                        } else if (label.contains("квадратура:")) {
-                            size = extractIntFromText(value).orElse(null);
-                        } else if (label.contains("греење:")) {
-                            heating = value;
-                        } else if (label.contains("состојба:")) {
-                            state = value;
-                        } else if (label.contains("спрат:")) {
-                            floor = extractIntFromText(value).orElse(null);
-                        } else if (label.contains("број на спратови:")) {
-                            numFloors = extractIntFromText(value).orElse(null);
-                        } else if (label.contains("вид на оглас")) {
-                            forSale = value.contains("се продава");
-                        } else if (label.contains("број на паркинг/гаража:"))
-                            parking = !value.equals("нема");
-                        else if (label.contains("опрема:"))
-                            furnished = value.contains("наместен");
-                        else if (label.contains("број на балкони:"))
-                            terrace = !value.equals("нема");
-                        else if (label.contains("лифт:"))
-                            lift = !value.contains("не");
-                        else if (label.contains("подрум:"))
-                            basement = value.contains("да");
-                        if (value.contains("дуплекс")) duplex = true;
+                            if (label.contains("број на соби:")) {
+                                numRooms = extractIntFromText(value).orElse(null);
+                            } else if (label.contains("квадратура:")) {
+                                size = extractIntFromText(value).orElse(null);
+                            } else if (label.contains("греење:")) {
+                                heating = value;
+                            } else if (label.contains("состојба:")) {
+                                state = value;
+                            } else if (label.contains("спрат:")) {
+                                floor = extractIntFromText(value).orElse(null);
+                            } else if (label.contains("број на спратови:")) {
+                                numFloors = extractIntFromText(value).orElse(null);
+                            } else if (label.contains("вид на оглас")) {
+                                forSale = value.contains("се продава");
+                            } else if (label.contains("број на паркинг/гаража:"))
+                                parking = !value.equals("нема");
+                            else if (label.contains("опрема:"))
+                                furnished = value.contains("наместен");
+                            else if (label.contains("број на балкони:"))
+                                terrace = !value.equals("нема");
+                            else if (label.contains("лифт:"))
+                                lift = !value.contains("не");
+                            else if (label.contains("подрум:"))
+                                basement = value.contains("да");
+                            if (value.contains("дуплекс")) duplex = true;
+                        }
                     }
-
 
                     Ad existingAd = supabaseService.getAdByUrl(link);
                     if (existingAd != null) {
