@@ -27,21 +27,21 @@ public class SeleniumWebScraperPazar3 {
 
 
     public static Optional<Integer> extractIntFromText(String text) {
+        String cleanedText = text.replaceAll("(\\d)\\s+(\\d)", "$1$2");
 
-        String cleanedText = text.replaceAll("[^\\d]", "");
+        Pattern pattern = Pattern.compile("\\d+");
+        Matcher matcher = pattern.matcher(cleanedText);
 
-
-        if (!cleanedText.isEmpty()) {
+        if (matcher.find()) {
             try {
-                return Optional.of(Integer.parseInt(cleanedText));
+                return Optional.of(Integer.parseInt(matcher.group()));
             } catch (NumberFormatException e) {
-
                 return Optional.empty();
             }
         }
-
         return Optional.empty();
     }
+
 
     private final SupabaseService supabaseService;
 
@@ -136,7 +136,7 @@ public class SeleniumWebScraperPazar3 {
                         priceText = priceElements.get(0).getText();
                         price=extractIntFromText(priceText).get();
                         if(priceText.toLowerCase().contains("mkd")||priceText.toLowerCase().contains("мкд")||priceText.toLowerCase().contains("ден")) {
-                        price/=60;
+                        price/=61;
                         }
 
                     } else {
@@ -174,7 +174,7 @@ public class SeleniumWebScraperPazar3 {
                         } else if (label.contains("спрат:")) {
                             floor = extractIntFromText(value).get();
                         } else if (label.contains("број на спратови:")) {
-                            numFloors = extractIntFromText(value).get();
+                            numFloors = extractIntFromText(value).isPresent()? extractIntFromText(value).get():null;
                         } else if (label.contains("локација:")) {
                             location = value;
                         } else if (label.contains("вид на оглас:")) {

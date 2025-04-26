@@ -90,11 +90,21 @@ public class SeleniumWebScraperReklama5 {
                     Thread.sleep(3000);
 
                     String title = driver.findElement(By.className("card-title")).getText();
-                    String priceText = driver.findElement(By.className("defaultBlue")).getText();
+                    List<WebElement> priceElements = driver.findElements(By.className("defaultBlue"));
+                    String priceText = null;
                     Integer price=null;
-                    price=extractIntFromText(priceText).get();
-                    if(priceText.toLowerCase().contains("mkd")||priceText.toLowerCase().contains("мкд")||priceText.toLowerCase().contains("ден")) {
-                        price/=60;
+                    if (!priceElements.isEmpty()) {
+                        priceText = priceElements.get(0).getText();
+                        if(priceText.equals("По Договор"))
+                            price=0;
+                        else
+                            price=extractIntFromText(priceText).get();
+                        if(priceText.toLowerCase().contains("mkd")||priceText.toLowerCase().contains("мкд")||priceText.toLowerCase().contains("ден")) {
+                            price/=61;
+                        }
+
+                    } else {
+                        System.out.println("Price not found for this ad.");
                     }
 
                     WebElement dateElement = driver.findElement(By.xpath("//div[@class='col-4 align-self-center']//div[@style='float:left']//small"));
@@ -144,11 +154,11 @@ public class SeleniumWebScraperReklama5 {
                             parking = !value.equals("нема");
                         else if (label.contains("опрема:"))
                             furnished = value.contains("наместен");
-                        else if (label.contains("број на балкони"))
+                        else if (label.contains("број на балкони:"))
                             terrace = !value.equals("нема");
-                        else if (label.contains("лифт"))
+                        else if (label.contains("лифт:"))
                             lift = !value.contains("не");
-                        else if (label.contains("подрум"))
+                        else if (label.contains("подрум:"))
                             basement = value.contains("да");
                         if (value.contains("дуплекс")) duplex = true;
                     }
