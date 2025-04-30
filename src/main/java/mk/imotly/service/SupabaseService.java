@@ -12,5 +12,8 @@ public interface SupabaseService {
 
     Ad getAdByUrl(String url);
     String registerUser(String email, String password, String name, String surname);
-    public List<Ad> searchAds(Boolean forSale, Integer minPrice, Integer maxPrice, Integer minSize, Integer maxSize, Boolean lift, Boolean basement);
+    public List<Ad> searchAds(int page, int size,Boolean forSale, Integer minPrice, Integer maxPrice, Integer minSize, Integer maxSize, Boolean lift, Boolean basement,
+                              String title, String location, Integer numRooms, Integer floor, Integer numFloors,
+                              String heating, String typeOfObj, String state, Boolean terrace, Boolean parking, Boolean furnished,
+                              Boolean newBuilding, Boolean duplex, Boolean renovated);
 }

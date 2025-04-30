@@ -1,0 +1,10 @@
+.rangeSliderWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.sliderInput {
+    width: 28%;
+    accent-color: #6a6dcd;
+}

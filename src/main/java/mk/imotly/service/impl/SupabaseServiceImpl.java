@@ -82,8 +82,13 @@ public class SupabaseServiceImpl implements SupabaseService {
     }
 
     @Override
-    public List<Ad> searchAds(Boolean forSale, Integer minPrice, Integer maxPrice, Integer minSize, Integer maxSize, Boolean lift, Boolean basement) {
-        return supabaseClient.searchAds(forSale, minPrice, maxPrice, minSize, maxSize, lift, basement);
+    public List<Ad> searchAds(int page, int size,Boolean forSale, Integer minPrice, Integer maxPrice, Integer minSize, Integer maxSize, Boolean lift, Boolean basement,
+                              String title, String location, Integer numRooms, Integer floor, Integer numFloors,
+                              String heating, String typeOfObj, String state, Boolean terrace, Boolean parking, Boolean furnished,
+                              Boolean newBuilding, Boolean duplex, Boolean renovated) {
+        return supabaseClient.searchAds(page, size,
+                forSale, minPrice, maxPrice, minSize, maxSize, lift, basement, title, location, numRooms, floor, numFloors,
+                heating, typeOfObj, state, terrace, parking, furnished, newBuilding, duplex, renovated);
     }
 
 

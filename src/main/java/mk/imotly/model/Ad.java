@@ -9,10 +9,7 @@ import java.time.LocalDate;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Ad {
     private Long id;
-    private String title;
-    private Integer price;
 
-    private String location;
     @JsonProperty("date_posted")
     LocalDate datePosted;
     private String url;
@@ -20,6 +17,10 @@ public class Ad {
 
     @JsonProperty("imageurl")
     private String imageUrl;
+
+    private String title;
+    private Integer price;
+    private String location;
     @JsonProperty("num_rooms")
     private Integer numRooms;
     private Integer floor;
@@ -72,10 +73,14 @@ public class Ad {
         this.duplex = duplex;
         this.renovated = renovated;
         this.lift = lift;
-        if(!forSale){
+
             if(title.toLowerCase().contains("prodava") || title.toLowerCase().contains("продава") ){
                 forSale = true;
             }
+            else if(title.toLowerCase().contains("izdava") || title.toLowerCase().contains("издава") ||
+                    title.toLowerCase().contains("iznajmuva") || title.toLowerCase().contains("изнајмува")){
+                forSale=false;
+
         }
 
     }

@@ -1,7 +1,6 @@
 "use client";
 import * as React from "react";
 import styles from "./InputDesign.module.css";
-import NavigationMenu from "./NavigationMenu";
 import Logo from "./Logo";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -25,21 +24,24 @@ function InputDesign() {
 
     return (
         <header className={styles.header}>
-            <NavigationMenu />
-            <Logo />
+            <Link to="/"><Logo /></Link>
+
+
+
             <div className={styles.userActions}>
                 {user ? (
-                    <>  <Link to="/" className={styles.loginButton}>
+                    <>  <Link to="/" className={styles.loginButton}>Home</Link>
+                        <Link to="/" className={styles.loginButton}>
                         Saved Ads
                     </Link>
                         <span className={styles.userEmail}>Welcome, {user.email}</span>
-                        <button onClick={handleLogout} className={styles.loginButton}>
+                        <button onClick={handleLogout} className={styles.addListingButton}>
                             Logout
                         </button>
                     </>
                 ) : (
                     <>
-
+                        <Link to="/" className={styles.loginButton}>Home</Link>
                         <Link to="/login" className={styles.loginButton}>
                             Login
                         </Link>
