@@ -37,12 +37,21 @@ public class SeleniumWebScraperReklama5 {
     }
 
     private Optional<Integer> extractIntFromText(String text) {
-        Matcher matcher = Pattern.compile("(\\d+)").matcher(text);
-        return matcher.find() ? Optional.of(Integer.parseInt(matcher.group(1))) : Optional.empty();
+        Matcher matcher = Pattern.compile("(\\d{1,3}(?:\\.\\d{3})*|\\d+)").matcher(text);
+        if (matcher.find()) {
+            String matchedNumber = matcher.group(1).replace(".", "");
+            try {
+                return Optional.of(Integer.parseInt(matchedNumber));
+            } catch (NumberFormatException e) {
+                return Optional.empty();
+            }
+        }
+        return Optional.empty();
     }
 
+
     public void scrapeReklama5() {
-        boolean checkOnlyFirstPage = true;
+        boolean checkOnlyFirstPage = false;
         WebDriverManager.chromedriver().driverVersion("135.0.7049.85").setup();
         WebDriver driver = new ChromeDriver();
 

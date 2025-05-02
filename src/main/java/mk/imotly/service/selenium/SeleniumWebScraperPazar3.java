@@ -82,7 +82,7 @@ public class SeleniumWebScraperPazar3 {
         } }
 
     public void scrapePazar3() {
-        boolean checkOnlyFirstPage = true;
+        boolean checkOnlyFirstPage = false;
         WebDriverManager.chromedriver().driverVersion("135.0.7049.85").setup();
         WebDriver driver = new ChromeDriver();
 

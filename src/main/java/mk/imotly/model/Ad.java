@@ -75,13 +75,18 @@ public class Ad {
         this.lift = lift;
 
             if(title.toLowerCase().contains("prodava") || title.toLowerCase().contains("продава") ){
-                forSale = true;
+                this.forSale = true;
             }
             else if(title.toLowerCase().contains("izdava") || title.toLowerCase().contains("издава") ||
                     title.toLowerCase().contains("iznajmuva") || title.toLowerCase().contains("изнајмува")){
-                forSale=false;
+                this.forSale=false;
 
         }
+            if(title.toLowerCase().contains("plac") || title.toLowerCase().contains("плац") ||
+                    title.toLowerCase().contains("niva") || title.toLowerCase().contains("нива")||
+        title.toLowerCase().contains("zemjis") || title.toLowerCase().contains("земјиште") ){
+                this.typeOfObj="Земјиште";
+            }
 
     }
 
