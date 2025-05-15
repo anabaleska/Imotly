@@ -53,7 +53,7 @@ public class SeleniumWebScraperPazar3 {
     private static LocalDate parseDate(String datePosted) {
         Map<String, String> monthMap = new HashMap<>();
         monthMap.put("јан.", "Jan");
-        monthMap.put("феб.", "Feb");
+        monthMap.put("фев.", "Feb");
         monthMap.put("мар.", "Mar");
         monthMap.put("апр.", "Apr");
         monthMap.put("мај", "May");
@@ -82,7 +82,7 @@ public class SeleniumWebScraperPazar3 {
         } }
 
     public void scrapePazar3() {
-        boolean checkOnlyFirstPage = false;
+        boolean checkOnlyFirstPage = true;
         WebDriverManager.chromedriver().driverVersion("135.0.7049.85").setup();
         WebDriver driver = new ChromeDriver();
 

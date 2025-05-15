@@ -47,7 +47,7 @@ const PropertyGrid = () => {
     return (
         <>
             {user ? (
-                <Filters onFiltersChange={handleFiltersChange} />
+                <Filters onFiltersChange={handleFiltersChange}  user={user}/>
             ) : (
                 <div style={{ padding: "1rem", textAlign: "center", backgroundColor: "#f8d7da", color: "#721c24", borderRadius: "8px", margin: "1rem" }}>
                     <strong>Log in to filter the ads.</strong>

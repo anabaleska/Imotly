@@ -7,7 +7,6 @@ public class RegisterRequest {
     private String name;
     private String surname;
 
-    // Getters and Setters
     public String getEmail() {
         return email;
     }

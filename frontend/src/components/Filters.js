@@ -4,7 +4,7 @@ import DropDown from "./DropDown";
 import "./ToggleSwitch.css";
 import RangeSlider from "./RangeSlider";
 
-function Filters({ onFiltersChange }) {
+function Filters({ onFiltersChange, user }) {
     const [filters, setFilters] = useState({
         title: '',
         maxPrice: '',
@@ -39,18 +39,18 @@ function Filters({ onFiltersChange }) {
         lift: "Lift"
     };
 
-    const locations = ["Аеродром", "Арачиново", "Берово", "Битола", "Богданци",
+    const locations = ["", "Аеродром", "Арачиново", "Берово", "Битола", "Богданци",
         "Боговиње", "Босилово", "Брвеница",
         "Бутел", "Валандово", "Василево", "Вевчани", "Велес", "Виница",
         "Врапчиште", "Гази Баба", "Гевгелија", "Гостивар", "Градско", "Дебар",
         "Дебрца", "Делчево", "Демир Капија", "Демир Хисар", "Дојран", "Долнени",
         "Ѓорче Петров", "Желино", "Зелениково", "Зрновци", "Илинден", "Јегуновце", "Кавадарци",
         "Карбинци", "Карпош", "Кисела Вода", "Кичево", "Конче", "Кочани", "Кратово", "Крива Паланка", "Кривогаштани", "Крушево",
-        "Куманово", "Липково", "Лозово", "Маврово и Ростуше", "Македонска Каменица",
+        "Куманово", "Липково", "Лозово", "Маврово и Ростушa", "Македонска Каменица",
         "Македонски Брод", "Могила", "Неготино", "Новаци", "Ново Село", "Охрид", "Петровец",
-        "Пехчево", "Пласница", "Пласница", "Прилеп", "Пробиштип", "Радовиш", "Ранковце", "Ресен", "Росоман", "Сарај", "Свети Николе", "Сопиште",
-        "Старо Нагоричане", "Струга", "Струмица", "Студеничани", "Теарце", "Тетово", "Центар", "Центар Жупа", "Чаир", "Чашка", "Чешиново-Облешево",
-        "Чучер-Сандево", "Штип", "Шуто Оризари"]
+        "Пехчево", "Пласница", "Пласница", "Прилеп", "Пробиштип", "Радовиш", "Ранковце", "Ресен", "Росоман", "Скопје", "Сарај", "Свети Николе", "Сопиште",
+        "Старо Нагоричане", "Струга", "Струмица", "Студеничани", "Теарце", "Тетово", "Центар", "Центар Жупа", "Чаир", "Чашка", "Чешиново Облешево",
+        "Чучер Сандево", "Штип", "Шуто Оризари"]
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -64,6 +64,38 @@ function Filters({ onFiltersChange }) {
     const handleSubmit = (e) => {
         e.preventDefault();
         onFiltersChange(filters);
+    };
+    const [notifyMe, setNotifyMe] = useState(false);
+
+    useEffect(() => {
+        if (notifyMe) {
+            handleNotifyMe();
+        }
+    }, [notifyMe]);
+    const handleNotifyMe = async () => {
+        try {
+            console.log("Sending to backend:", {
+                email: user.email,
+                filters: filters,
+            });
+            const res = await fetch("http://localhost:5001/ads/subscribe", {
+
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    email: user.email,
+                    filters: filters,
+                }),
+            });
+
+            const data = await res.json();
+            alert(data.message || "Subscription successful.");
+        } catch (err) {
+            console.error("Subscription failed", err);
+            alert("Could not subscribe for notifications.");
+        }
     };
 
     return (
@@ -109,7 +141,16 @@ function Filters({ onFiltersChange }) {
                 ))}
             </div>
 
-
+            <div style={{ textAlign: "center", marginTop: "1rem" }}>
+                <label>
+                    <input
+                        type="checkbox"
+                        checked={notifyMe}
+                        onChange={(e) => setNotifyMe(e.target.checked)}
+                    />
+                    Notify me when similar properties appear
+                </label>
+            </div>
             <button type="submit">Apply Filters</button>
         </form>
     );

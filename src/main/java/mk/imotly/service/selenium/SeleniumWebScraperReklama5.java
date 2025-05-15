@@ -51,7 +51,7 @@ public class SeleniumWebScraperReklama5 {
 
 
     public void scrapeReklama5() {
-        boolean checkOnlyFirstPage = false;
+        boolean checkOnlyFirstPage = true;
         WebDriverManager.chromedriver().driverVersion("135.0.7049.85").setup();
         WebDriver driver = new ChromeDriver();
 
@@ -118,7 +118,7 @@ public class SeleniumWebScraperReklama5 {
 
                     WebElement dateElement = driver.findElement(By.xpath("//div[@class='col-4 align-self-center']//div[@style='float:left']//small"));
                     String datePosted = dateElement.getText().split(" ")[0];
-                    WebElement cityElement = driver.findElement(By.xpath("//div[@class='col-4 align-self-center']//p"));
+                    WebElement cityElement = driver.findElement(By.xpath("(//div[@class='col-4 align-self-center'])[3]//p"));
                     String location = cityElement.getText();
                     LocalDate date;
                     if (datePosted.toLowerCase().contains("денес")) date = LocalDate.now();

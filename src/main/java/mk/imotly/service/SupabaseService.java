@@ -1,6 +1,8 @@
 package mk.imotly.service;
 
 import mk.imotly.model.Ad;
+import mk.imotly.model.SavedSearch;
+
 import java.util.List;
 
 public interface SupabaseService {
@@ -16,4 +18,12 @@ public interface SupabaseService {
                               String title, String location, Integer numRooms, Integer floor, Integer numFloors,
                               String heating, String typeOfObj, String state, Boolean terrace, Boolean parking, Boolean furnished,
                               Boolean newBuilding, Boolean duplex, Boolean renovated);
+
+    boolean saveSubscription(SavedSearch savedSearch);
+
+    Long getUserIdByEmail(String email);
+
+    String getUserEmailById(Long userId);
+
+    List<SavedSearch> getAllSubscriptions();
 }
