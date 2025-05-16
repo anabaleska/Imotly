@@ -20,11 +20,11 @@ public class ScraperService {
     @Scheduled(fixedRate = 3600000)
     public void runScrapers() {
         System.out.println("Starting scraper 1...");
-       //scraperReklama5.scrapeReklama5();
+       scraperReklama5.scrapeReklama5();
         System.out.println("Scraper 1 completed.");
 
         System.out.println("Starting scraper 2...");
-        //scraperPazar3.scrapePazar3();
+        scraperPazar3.scrapePazar3();
         System.out.println("Scraper 2 completed.");
     }
 }

@@ -142,15 +142,17 @@ function Filters({ onFiltersChange, user }) {
             </div>
 
             <div style={{ textAlign: "center", marginTop: "1rem" }}>
-                <label>
-                    <input
-                        type="checkbox"
-                        checked={notifyMe}
-                        onChange={(e) => setNotifyMe(e.target.checked)}
-                    />
-                    Notify me when similar properties appear
-                </label>
+                {notifyMe ? (
+                    <button disabled style={{ backgroundColor: "#4caf50", color: "white", padding: "0.75rem 1.5rem", border: "none", borderRadius: "8px", cursor: "not-allowed" }}>
+                        ✅ You're in! We'll notify you.
+                    </button>
+                ) : (
+                    <button onClick={() => setNotifyMe(true)} style={{ backgroundColor: "#007bff", color: "white", padding: "0.75rem 1.5rem", border: "none", borderRadius: "8px", cursor: "pointer" }}>
+                        🔔 Notify me about similar properties
+                    </button>
+                )}
             </div>
+
             <button type="submit">Apply Filters</button>
         </form>
     );

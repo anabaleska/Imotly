@@ -43,7 +43,7 @@ public class SupabaseServiceImpl implements SupabaseService {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(toEmail);
         message.setSubject("New Ad Matching Your Preferences");
-        message.setText("A new ad that matches your preferences has been added: \n\n" + ad.toString() + "\n\nCheck it out!");
+        message.setText("A new ad that matches your preferences has been added: \n\n" + ad.getUrl() + "\n\nCheck it out!");
 
         mailSender.send(message);
     }
@@ -133,7 +133,7 @@ public class SupabaseServiceImpl implements SupabaseService {
 
     private boolean doesAdMatchSubscription(Ad ad, SavedSearch savedSearch) {
 
-        if (savedSearch.getForSale() != null && !savedSearch.getForSale().equals(ad.getForSale())) {
+        if (savedSearch.getForSale() != null && ad.getForSale() != null && !savedSearch.getForSale().equals(ad.getForSale())) {
             return false;
         }
         if (savedSearch.getMinPrice() != null && ad.getPrice() < savedSearch.getMinPrice()) {
@@ -142,52 +142,52 @@ public class SupabaseServiceImpl implements SupabaseService {
         if (savedSearch.getMaxPrice() != null && ad.getPrice() > savedSearch.getMaxPrice()) {
             return false;
         }
-        if (savedSearch.getLocation() != null && !savedSearch.getLocation().equalsIgnoreCase(ad.getLocation())) {
+        if (savedSearch.getLocation() != null && ad.getLocation() != null && !ad.getLocation().contains(savedSearch.getLocation())) {
             return false;
         }
-        if (savedSearch.getNumRooms() != null && !savedSearch.getNumRooms().equals(ad.getNumRooms())) {
+        if (savedSearch.getNumRooms() != null && ad.getNumRooms() != null && !savedSearch.getNumRooms().equals(ad.getNumRooms())) {
             return false;
         }
-        if (savedSearch.getFloor() != null && !savedSearch.getFloor().equals(ad.getFloor())) {
+        if (savedSearch.getFloor() != null && ad.getFloor() != null && !savedSearch.getFloor().equals(ad.getFloor())) {
             return false;
         }
-        if (savedSearch.getNumFloors() != null && !savedSearch.getNumFloors().equals(ad.getNumFloors())) {
+        if (savedSearch.getNumFloors() != null && ad.getNumFloors() != null  && !savedSearch.getNumFloors().equals(ad.getNumFloors())) {
             return false;
         }
-        if (savedSearch.getSize() != null && !savedSearch.getSize().equals(ad.getSize())) {
+        if (savedSearch.getSize() != null && ad.getSize() != null && !savedSearch.getSize().equals(ad.getSize())) {
             return false;
         }
-        if (savedSearch.getHeating() != null && !savedSearch.getHeating().equalsIgnoreCase(ad.getHeating())) {
+        if (savedSearch.getHeating() != null && ad.getHeating() != null && !savedSearch.getHeating().equalsIgnoreCase(ad.getHeating())) {
             return false;
         }
-        if (savedSearch.getTypeOfObj() != null && !savedSearch.getTypeOfObj().equalsIgnoreCase(ad.getTypeOfObj())) {
+        if (savedSearch.getTypeOfObj() != null && ad.getTypeOfObj() != null && !savedSearch.getTypeOfObj().equalsIgnoreCase(ad.getTypeOfObj())) {
             return false;
         }
-        if (savedSearch.getTerrace() != null && !savedSearch.getTerrace().equals(ad.getTerrace())) {
+        if (savedSearch.getTerrace() != null && ad.getTerrace() != null && !savedSearch.getTerrace().equals(ad.getTerrace())) {
             return false;
         }
-        if (savedSearch.getParking() != null && !savedSearch.getParking().equals(ad.getParking())) {
+        if (savedSearch.getParking() != null && ad.getParking() != null && !savedSearch.getParking().equals(ad.getParking())) {
             return false;
         }
-        if (savedSearch.getFurnished() != null && !savedSearch.getFurnished().equals(ad.getFurnished())) {
+        if (savedSearch.getFurnished() != null && ad.getFurnished() != null && !savedSearch.getFurnished().equals(ad.getFurnished())) {
             return false;
         }
-        if (savedSearch.getBasement() != null && !savedSearch.getBasement().equals(ad.getBasement())) {
+        if (savedSearch.getBasement() != null && ad.getBasement() != null  && !savedSearch.getBasement().equals(ad.getBasement())) {
             return false;
         }
-        if (savedSearch.getNewBuilding() != null && !savedSearch.getNewBuilding().equals(ad.getNewBuilding())) {
+        if (savedSearch.getNewBuilding() != null && ad.getNewBuilding() != null && !savedSearch.getNewBuilding().equals(ad.getNewBuilding())) {
             return false;
         }
-        if (savedSearch.getDuplex() != null && !savedSearch.getDuplex().equals(ad.getDuplex())) {
+        if (savedSearch.getDuplex() != null && ad.getDuplex() != null && !savedSearch.getDuplex().equals(ad.getDuplex())) {
             return false;
         }
-        if (savedSearch.getRenovated() != null && !savedSearch.getRenovated().equals(ad.getRenovated())) {
+        if (savedSearch.getRenovated()!= null && ad.getRenovated() != null  && !savedSearch.getRenovated().equals(ad.getRenovated())) {
             return false;
         }
-        if (savedSearch.getLift() != null && !savedSearch.getLift().equals(ad.getLift())) {
+        if (savedSearch.getLift() != null && ad.getLift() != null && !savedSearch.getLift().equals(ad.getLift())) {
             return false;
         }
-        if (savedSearch.getState() != null && !savedSearch.getState().equalsIgnoreCase(ad.getState())) {
+        if (savedSearch.getState() != null && ad.getState() !=null && !savedSearch.getState().equalsIgnoreCase(ad.getState())) {
             return false;
         }
         return true;
