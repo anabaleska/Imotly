@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { loginUser } from '../api/supabase';
-import {Link, useNavigate} from 'react-router-dom';
-import Register from "./Register";
+import {Link, useLocation, useNavigate} from 'react-router-dom';
+import styles from './Login.module.css';
 
-const Login = () => {
+const Login = ({ onClose }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
-
-
+    const location = useLocation()
 
     useEffect(() => {
         const user = localStorage.getItem('supabase_user');
@@ -20,7 +19,7 @@ const Login = () => {
                 if (parsedUser) {
                     navigate('/');
                 } else {
-                    setLoading(false); //
+                    setLoading(false);
                 }
             } catch (e) {
                 console.error('Error parsing user data:', e);
@@ -39,22 +38,23 @@ const Login = () => {
         if (error) {
             setError(error.message);
         } else {
-            console.log('User logged in:', user);
-
             localStorage.setItem('supabase_user', JSON.stringify(user));
+            if (onClose) onClose();
             navigate('/');
         }
     };
+
     if (loading) {
         return <div>Loading...</div>;
     }
 
     return (
-        <div>
-            <h2>Login</h2>
+        <div className={styles.card}>
+            <h2 className={styles.title}>Login</h2>
             <form onSubmit={handleLogin}>
                 <input
                     type="email"
+                    className={styles.input}
                     placeholder="Email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -62,16 +62,20 @@ const Login = () => {
                 />
                 <input
                     type="password"
+                    className={styles.input}
                     placeholder="Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
                 />
-                {error && <p style={{color:"red"}}>{error}</p>}
-                <button type="submit">Login</button>
+                {error && <p className={styles.error}>{error}</p>}
+                <button type="submit" className={styles.button}>Login</button>
             </form>
-            <p>Don't have an account? <Link to="/register">Register Here!</Link></p>
+            <div className={styles.link}>
+                Don’t have an account? <Link to="/register" state={{ backgroundLocation: location }}>Register Here!</Link>
+            </div>
         </div>
     );
 };
+
 export default Login;

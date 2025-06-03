@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { registerUser } from '../api/supabase';
-import {Link, useNavigate} from 'react-router-dom';
+import {Link, useLocation, useNavigate} from 'react-router-dom';
+import styles from './Register.module.css';
 
-const Register = () => {
+const Register = ({ onClose }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
@@ -11,6 +12,7 @@ const Register = () => {
     const [success, setSuccess] = useState('');
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
+    const location = useLocation()
 
     useEffect(() => {
         const user = localStorage.getItem('supabase_user');
@@ -33,45 +35,36 @@ const Register = () => {
 
     const handleRegister = async (e) => {
         e.preventDefault();
-
-
         setError('');
         setSuccess('');
-
-        console.log("Registering user with:", {
-            email,
-            password,
-            name,
-            surname
-        });
 
         try {
             const response = await registerUser(email, password, name, surname);
 
             if (response.error) {
-
                 setError(response.error);
             } else {
-
                 setSuccess('Registration successful! Please log in.');
                 localStorage.setItem('supabase_user', JSON.stringify(response.user));
+                if (onClose) onClose(); // close modal if opened in modal
                 navigate('/login');
             }
         } catch (err) {
-
             setError('An unexpected error occurred. Please try again.');
         }
     };
+
     if (loading) {
         return <div>Loading...</div>;
     }
 
     return (
-        <div>
-            <h2>Register</h2>
+        <div className={styles.card}>
+            <h2 className={styles.title}>Register</h2>
             <form onSubmit={handleRegister}>
                 <input
                     type="text"
+                    className={styles.input}
                     placeholder="Name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
@@ -79,6 +72,7 @@ const Register = () => {
                 />
                 <input
                     type="text"
+                    className={styles.input}
                     placeholder="Surname"
                     value={surname}
                     onChange={(e) => setSurname(e.target.value)}
@@ -86,6 +80,7 @@ const Register = () => {
                 />
                 <input
                     type="email"
+                    className={styles.input}
                     placeholder="Email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -93,16 +88,19 @@ const Register = () => {
                 />
                 <input
                     type="password"
+                    className={styles.input}
                     placeholder="Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
                 />
-                {error && <p style={{ color: 'red' }}>{error}</p>}  {/* Display error */}
-                {success && <p style={{ color: 'green' }}>{success}</p>}  {/* Display success */}
-                <button type="submit">Register</button>
+                {error && <p className={styles.error}>{error}</p>}
+                {success && <p className={styles.success}>{success}</p>}
+                <button type="submit" className={styles.button}>Register</button>
             </form>
-            <p>Already have an account? <Link to="/login">Login Here!</Link></p>
+            <div className={styles.link}>
+                Already have an account? <Link to="/login" state={{ backgroundLocation: location }}>Login Here!</Link>
+            </div>
         </div>
     );
 };

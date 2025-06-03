@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import {BrowserRouter as Router, Route, Routes, Navigate, useLocation, useNavigate} from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 
@@ -12,9 +12,15 @@ import Form from "./components/Form";
 import Carousel from "./components/Carousel";
 import {getUser, logoutUser} from "./api/supabase";
 import {fetchAds} from "./api/adApi";
+import Modal from "./components/Modal";
 
-function App() {
+function AppContent() {
     const [user, setUser] = useState(null);
+    const [showLogin, setShowLogin] = useState(false);
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    const state = location.state;
 
 
     useEffect(() => {
@@ -40,17 +46,16 @@ function App() {
 
 
     return (
-        <Router>
+
             <div>
                 <InputDesign />
                 {/*<Navbar user={user} onLogout={handleLogout} /> /!* Navbar with logout button *!/*/}
-                <Routes>
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
+                <Routes location={state?.backgroundLocation || location}>
+                    {/*<Route path="/login" element={<Login />} />*/}
+                    {/*<Route path="/register" element={<Register />} />*/}
                     <Route path="/" element={
 
                             <>
-
                                 <PropertyGrid/>
                                 {/*<Rectangle />*/}
                                 {/*<div style={{ display: 'flex', gap: '5px', padding: '30px' }}>*/}
@@ -66,7 +71,26 @@ function App() {
 
                     } />
                 </Routes>
+                {state?.backgroundLocation && location.pathname === '/login' && (
+                    <Modal onClose={() => navigate(-1)}>
+                        <Login />
+                    </Modal>
+                )}
+                {state?.backgroundLocation && location.pathname === '/register' && (
+                    <Modal onClose={() => navigate(-1)}>
+                        <Register />
+                    </Modal>
+                )}
+
             </div>
+
+    );
+}
+
+function App() {
+    return (
+        <Router>
+            <AppContent />
         </Router>
     );
 }

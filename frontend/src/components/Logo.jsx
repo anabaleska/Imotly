@@ -26,7 +26,6 @@ const Logo = () => {
                 <text
                     fill="#1E1E1E"
                     style={{ whiteSpace: "pre" }}
-                    //fontFamily="Poppins"
                     fontSize="20"
                     fontWeight="600"
                     letterSpacing="0em"
