@@ -2,10 +2,10 @@
 import React from "react";
 import styles from "./RangeSlider.module.css";
 
-const RangeSlider = ({ name, label, value, min, max, onChange }) => {
+const RangeSlider = ({ name, label,label2, value, min, max, onChange }) => {
     return (
         <div className={styles.rangeSliderWrapper}>
-            <label htmlFor={name}>{label}: {value}</label>
+            <label htmlFor={name}>{label}: {value}{label2}</label>
             <input
                 type="range"
                 id={name}

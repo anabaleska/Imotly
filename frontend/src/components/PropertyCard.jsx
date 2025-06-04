@@ -7,7 +7,9 @@ const PropertyCard = ({
                           price,
                           title,
                           location,
-                          link
+                          link,
+
+
                       }) => {
     return (
         <a href={link} target="_blank" rel="noopener noreferrer" className={styles.cardLink} style={{ textDecoration: "none" }}>
@@ -16,9 +18,10 @@ const PropertyCard = ({
                 <img src={imageurl} alt={title} className={styles.cardImage} />
             )}
             <div className={styles.cardContent}>
-                <h2 className={styles.price}>${price}</h2>
+                <h2 className={styles.price}>€{price}</h2>
                 <h3 className={styles.title}>{title}</h3>
                 <p className={styles.location}>{location}</p>
+
             </div>
         </article></a>
     );

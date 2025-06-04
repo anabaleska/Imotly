@@ -27,6 +27,7 @@ const PropertyGrid = () => {
     const loadAds = async (pageToLoad, filtersToUse) => {
         const fetched = await fetchAds(pageToLoad, limit, filtersToUse);
         setAds(fetched);
+
     };
 
 
@@ -42,7 +43,7 @@ const PropertyGrid = () => {
     const handleFiltersChange = (newFilters) => {
         setFilters(newFilters);
     };
-    console.log(user);
+
 
     return (
         <>
@@ -60,6 +61,7 @@ const PropertyGrid = () => {
                 <>
                     <section className={styles.propertyGrid}>
                         {ads.map((ad) => (
+
                             <PropertyCard key={ad.id} link={ad.url} {...ad} />
                         ))}
                     </section>

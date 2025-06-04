@@ -21,7 +21,7 @@ const DropDown = ({ name, value, onChange, options = [], label = "" }) => {
     };
 
     return (
-        <div className={styles.container}>
+        <div className={styles.container} style={{width:'20%'}}>
             <label className={styles.label}>{label}</label>
             <button
                 type="button"
