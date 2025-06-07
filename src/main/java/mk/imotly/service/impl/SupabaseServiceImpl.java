@@ -161,7 +161,7 @@ public class SupabaseServiceImpl implements SupabaseService {
         if (savedSearch.getMaxPrice() != null && ad.getPrice() > savedSearch.getMaxPrice()) {
             return false;
         }
-        if (savedSearch.getLocation() != null && ad.getLocation() != null && !ad.getLocation().contains(savedSearch.getLocation().toLowerCase())) {
+        if (savedSearch.getLocation() != null && savedSearch.getLocation()!=""&& ad.getLocation() != null && !ad.getLocation().contains(savedSearch.getLocation().toLowerCase())) {
             return false;
         }
         if (savedSearch.getNumRooms() != null && ad.getNumRooms() != null && !savedSearch.getNumRooms().equals(ad.getNumRooms())) {
@@ -176,10 +176,10 @@ public class SupabaseServiceImpl implements SupabaseService {
         if (savedSearch.getSize() != null && ad.getSize() != null && !savedSearch.getSize().equals(ad.getSize())) {
             return false;
         }
-        if (savedSearch.getHeating() != null && ad.getHeating() != null && !savedSearch.getHeating().equalsIgnoreCase(ad.getHeating())) {
+        if (savedSearch.getHeating() != null && ad.getHeating() != null && savedSearch.getHeating()!=""&& !savedSearch.getHeating().equalsIgnoreCase(ad.getHeating())) {
             return false;
         }
-        if (savedSearch.getTypeOfObj() != null && ad.getTypeOfObj() != null && !savedSearch.getTypeOfObj().equalsIgnoreCase(ad.getTypeOfObj())) {
+        if (savedSearch.getTypeOfObj() != null && savedSearch.getTypeOfObj()!=""&& ad.getTypeOfObj() != null && !savedSearch.getTypeOfObj().equalsIgnoreCase(ad.getTypeOfObj())) {
             return false;
         }
         if (savedSearch.getTerrace() != null && ad.getTerrace() != null && !savedSearch.getTerrace().equals(ad.getTerrace())) {
@@ -206,7 +206,7 @@ public class SupabaseServiceImpl implements SupabaseService {
         if (savedSearch.getLift() != null && ad.getLift() != null && !savedSearch.getLift().equals(ad.getLift())) {
             return false;
         }
-        if (savedSearch.getState() != null && ad.getState() !=null && !savedSearch.getState().equalsIgnoreCase(ad.getState())) {
+        if (savedSearch.getState() != null &&  savedSearch.getState()!=""&& ad.getState() !=null && !savedSearch.getState().equalsIgnoreCase(ad.getState())) {
             return false;
         }
         return true;
