@@ -17,6 +17,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SupabaseServiceImpl implements SupabaseService {
@@ -113,8 +114,26 @@ public class SupabaseServiceImpl implements SupabaseService {
     }
 
     @Override
+    public long countAds( Boolean forSale, Integer minPrice, Integer maxPrice, Integer minSize, Integer maxSize, Boolean lift, Boolean basement, String title, String location, Integer numRooms, Integer floor, Integer numFloors, String heating, String typeOfObj, String state, Boolean terrace, Boolean parking, Boolean furnished, Boolean newBuilding, Boolean duplex, Boolean renovated) {
+        return supabaseClient.countAds( forSale, minPrice, maxPrice, minSize, maxSize, lift, basement, title, location, numRooms, floor, numFloors,
+                heating, typeOfObj, state, terrace, parking, furnished, newBuilding, duplex, renovated);
+    }
+
+    @Override
     public boolean saveSubscription(SavedSearch savedSearch) {
         return supabaseClient.saveSubscription(savedSearch);
+    }
+
+    @Override
+    public boolean deleteSavedSearchById(Long id) {
+        return supabaseClient.deleteSavedSearchById(id);
+    }
+
+    @Override
+    public List<SavedSearch> getSearchesByUser(String email) {
+        Long id=getUserIdByEmail(email);
+        List<SavedSearch> subscriptions = getAllSubscriptions();
+        return subscriptions.stream().filter(x->x.getUserId().equals(id)).collect(Collectors.toList());
     }
 
     @Override
@@ -142,7 +161,7 @@ public class SupabaseServiceImpl implements SupabaseService {
         if (savedSearch.getMaxPrice() != null && ad.getPrice() > savedSearch.getMaxPrice()) {
             return false;
         }
-        if (savedSearch.getLocation() != null && ad.getLocation() != null && !ad.getLocation().contains(savedSearch.getLocation())) {
+        if (savedSearch.getLocation() != null && ad.getLocation() != null && !ad.getLocation().contains(savedSearch.getLocation().toLowerCase())) {
             return false;
         }
         if (savedSearch.getNumRooms() != null && ad.getNumRooms() != null && !savedSearch.getNumRooms().equals(ad.getNumRooms())) {

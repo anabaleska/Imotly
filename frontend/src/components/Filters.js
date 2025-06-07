@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import SearchInput from "./SearchInput";
 import DropDown from "./DropDown";
 import "./ToggleSwitch.css";
@@ -99,9 +99,10 @@ function Filters({ onFiltersChange, user }) {
         }
     };
 
+    console.log(user);
     return (
         <form onSubmit={handleSubmit} style={{ padding: '10px 220px', display: 'grid', gap: '10px',}}>
-            <h1 style={{textAlign:'center', fontWeight:'inherit'}}>Filter Ads</h1>
+            <h1 style={{textAlign:'center', fontWeight:'lighter',color:"#3a0ca3"}}>Filter Ads</h1>
             <SearchInput name="title" placeholder="Наслов" value={filters.title} onChange={handleChange} />
             <div style={{
                 display: 'flex',
@@ -156,14 +157,7 @@ function Filters({ onFiltersChange, user }) {
                 max={250000}
                 onChange={handleChange}
             />
-            {/*<RangeSlider*/}
-            {/*    name="minPrice"*/}
-            {/*    label="Мин. Цена"*/}
-            {/*    value={filters.minPrice}*/}
-            {/*    min={0}*/}
-            {/*    max={250000}*/}
-            {/*    onChange={handleChange}*/}
-            {/*/>*/}
+
 
             <RangeSlider
                 name="maxSize"
@@ -179,7 +173,7 @@ function Filters({ onFiltersChange, user }) {
             {/*<input type="text" name="state" placeholder="State" value={filters.state} onChange={handleChange} />*/}
 
 
-
+            {user ? (
             <div style={{ textAlign:'center' }}>
                 {notifyMe ? (
                     <button disabled style={{ width:'300px', backgroundColor: "#2a2a55", color: "white", padding: "0.75rem 1.5rem", border: "none", borderRadius: "8px", cursor: "not-allowed" }}>
@@ -190,7 +184,16 @@ function Filters({ onFiltersChange, user }) {
                         🔔 Notify me about similar properties
                     </button>
                 )}
-            </div>
+            </div>): (<div style={{
+                padding: "1rem",
+                textAlign: "center",
+                backgroundColor: "#f8d7da",
+                color: "#721c24",
+                borderRadius: "8px",
+                margin: "1rem"
+            }}>
+                <strong>🔔 Login to be notified.</strong>
+            </div>)}
 
             <div style={{ textAlign:'center' }}>
             <button style={{ width:'300px', backgroundColor: "#2a2a55", color: "white", padding: "0.75rem 1.5rem", border: "none", borderRadius: "8px", cursor: "pointer" }} type="submit">Apply Filters</button>

@@ -33,6 +33,63 @@ public class SupabaseClient {
         return headers;
     }
 
+    public long countAds(Boolean forSale, Integer minPrice, Integer maxPrice, Integer minSize, Integer maxSize,
+                         Boolean lift, Boolean basement, String title, String location, Integer numRooms, Integer floor,
+                         Integer numFloors, String heating, String typeOfObj, String state, Boolean terrace, Boolean parking,
+                         Boolean furnished, Boolean newBuilding, Boolean duplex, Boolean renovated) {
+
+        StringBuilder urlBuilder = new StringBuilder(supabaseApiUrl + "/ads?select=id&");
+
+        if (forSale != null) urlBuilder.append("for_sale=eq.").append(forSale).append("&");
+        if (minPrice != null) urlBuilder.append("price=gte.").append(minPrice).append("&");
+        if (maxPrice != null) urlBuilder.append("price=lte.").append(maxPrice).append("&");
+        if (minSize != null) urlBuilder.append("size=gte.").append(minSize).append("&");
+        if (maxSize != null) urlBuilder.append("size=lte.").append(maxSize).append("&");
+        if (lift != null) urlBuilder.append("lift=is.").append(lift).append("&");
+        if (basement != null) urlBuilder.append("basement=is.").append(basement).append("&");
+        if (title != null && !title.isEmpty()) urlBuilder.append("title=ilike.%").append(title).append("%&");
+        if (location != null && !location.isEmpty()) urlBuilder.append("location=ilike.%").append(location).append("%&");
+        if (numRooms != null) urlBuilder.append("num_rooms=eq.").append(numRooms).append("&");
+        if (floor != null) urlBuilder.append("floor=eq.").append(floor).append("&");
+        if (numFloors != null) urlBuilder.append("num_floors=eq.").append(numFloors).append("&");
+        if (heating != null && !heating.isEmpty()) urlBuilder.append("heating=ilike.%").append(heating).append("%&");
+        if (typeOfObj != null && !typeOfObj.isEmpty()) urlBuilder.append("type_of_obj=ilike.%").append(typeOfObj).append("%&");
+        if (state != null && !state.isEmpty()) urlBuilder.append("state=ilike.%").append(state).append("%&");
+        if (terrace != null) urlBuilder.append("terrace=is.").append(terrace).append("&");
+        if (parking != null) urlBuilder.append("parking=is.").append(parking).append("&");
+        if (furnished != null) urlBuilder.append("furnished=is.").append(furnished).append("&");
+        if (newBuilding != null) urlBuilder.append("new_building=is.").append(newBuilding).append("&");
+        if (duplex != null) urlBuilder.append("duplex=is.").append(duplex).append("&");
+        if (renovated != null) urlBuilder.append("renovated=is.").append(renovated).append("&");
+
+        String url = urlBuilder.toString();
+
+        HttpHeaders headers = createHeaders();
+        headers.add("Prefer", "count=exact");
+
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                entity,
+                String.class
+        );
+
+        String countHeader = response.getHeaders().getFirst("Content-Range"); // e.g. "0-9/123"
+        if (countHeader != null && countHeader.contains("/")) {
+            String totalStr = countHeader.split("/")[1];
+            try {
+                return Long.parseLong(totalStr);
+            } catch (NumberFormatException e) {
+                System.err.println("Failed to parse count from Content-Range: " + totalStr);
+            }
+        }
+
+        return 0;
+    }
+
+
     public List<Ad> getAds(int page, int size) {
         HttpEntity<Void> entity = new HttpEntity<>(createHeaders());
         String url = supabaseApiUrl + "/ads?order=date_posted.desc&limit=" + size + "&offset=" + (page * size);
@@ -248,4 +305,32 @@ public class SupabaseClient {
             return null;
         }
     }
+    public boolean deleteSavedSearchById(Long id) {
+        String url = supabaseApiUrl + "/saved_searches?id=eq." + id;
+
+        HttpHeaders headers = createHeaders();
+
+        HttpEntity<Void> request = new HttpEntity<>(headers);
+
+        try {
+            ResponseEntity<String> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.DELETE,
+                    request,
+                    String.class
+            );
+
+            if (response.getStatusCode() == HttpStatus.NO_CONTENT || response.getStatusCode() == HttpStatus.OK) {
+                System.out.println("Saved search deleted successfully, id: " + id);
+                return true;
+            } else {
+                System.out.println("Failed to delete saved search: " + response.getStatusCode() + " - " + response.getBody());
+                return false;
+            }
+        } catch (Exception e) {
+            System.out.println("Error deleting saved search: " + e.getMessage());
+            return false;
+        }
+    }
+
 }

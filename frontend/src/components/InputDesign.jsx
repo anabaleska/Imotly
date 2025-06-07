@@ -20,7 +20,7 @@ function InputDesign() {
 
     const handleLogout = () => {
         localStorage.removeItem("supabase_user");
-        navigate("/login");
+        navigate("/");
     };
 
     return (
@@ -32,7 +32,7 @@ function InputDesign() {
             <div className={styles.userActions}>
                 {user ? (
                     <>  <Link to="/" className={styles.loginButton}>Home</Link>
-                        <Link to="/" className={styles.loginButton}>
+                        <Link to="/saved-searches" className={styles.loginButton}>
                         Saved Ads
                     </Link>
                         <span className={styles.userEmail}>Welcome, {user.email}</span>
@@ -43,7 +43,7 @@ function InputDesign() {
                 ) : (
                     <>
                         <Link to="/" className={styles.loginButton}>Home</Link>
-                        <Link  to="/login" state={{ backgroundLocation: location }}>
+                        <Link  to="/login" state={{ backgroundLocation: location }} className={styles.loginButton}>
                             Login
                         </Link>
                         <Link to="/register" state={{ backgroundLocation: location }} className={styles.addListingButton}>

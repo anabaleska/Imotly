@@ -57,8 +57,8 @@ public class SeleniumWebScraperPazar3 {
         monthMap.put("мар.", "Mar");
         monthMap.put("апр.", "Apr");
         monthMap.put("мај", "May");
-        monthMap.put("јуни", "Jun");
-        monthMap.put("јули", "Jul");
+        monthMap.put("јун.", "Jun");
+        monthMap.put("јул.", "Jul");
         monthMap.put("авг.", "Aug");
         monthMap.put("септ.", "Sep");
         monthMap.put("окт.", "Oct");

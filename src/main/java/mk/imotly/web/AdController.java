@@ -1,6 +1,7 @@
 package mk.imotly.web;
 
 import mk.imotly.model.Ad;
+import mk.imotly.model.DTO.PagedAdResponse;
 import mk.imotly.model.Filters;
 import mk.imotly.model.SavedSearch;
 import mk.imotly.model.SavedSearchRequest;
@@ -23,7 +24,7 @@ public class AdController {
         this.supabaseService = supabaseService;
     }
     @GetMapping
-    public ResponseEntity<List<Ad>> getAds(
+    public ResponseEntity<PagedAdResponse>getAds(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) Boolean forSale,
@@ -53,7 +54,10 @@ public class AdController {
                 forSale, minPrice, maxPrice, minSize, maxSize, lift, basement, title, location, numRooms, floor, numFloors,
                 heating, typeOfObj, state, terrace, parking, furnished, newBuilding, duplex, renovated
         );
-        return ResponseEntity.ok(ads);
+        long total=supabaseService.countAds( forSale, minPrice, maxPrice, minSize, maxSize, lift, basement, title, location, numRooms, floor, numFloors,
+                heating, typeOfObj, state, terrace, parking, furnished, newBuilding, duplex, renovated);
+        total = (int) Math.ceil((double) total / size);
+        return ResponseEntity.ok(new PagedAdResponse(ads, total));
     }
 
     @PostMapping
@@ -69,6 +73,25 @@ public class AdController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         return ResponseEntity.ok(ad);
+    }
+
+    @GetMapping("/saved/{id}")
+    public ResponseEntity<List<SavedSearch>> getSavedById(@PathVariable String id) {
+        List<SavedSearch> ad=supabaseService.getSearchesByUser(id);
+        if (ad == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(ad);
+    }
+
+    @DeleteMapping("/saved/{id}")
+    public ResponseEntity<Void> deleteSavedSearch(@PathVariable Long id) {
+        boolean deleted = supabaseService.deleteSavedSearchById(id);
+        if (deleted) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     private SavedSearch mapToSavedSearch(SavedSearchRequest request) {
@@ -119,6 +142,8 @@ public class AdController {
         }
         return ResponseEntity.status(500).body(Map.of("message", "Failed to save subscription."));
     }
+
+
 
 
 }

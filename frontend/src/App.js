@@ -13,6 +13,7 @@ import Carousel from "./components/Carousel";
 import {getUser, logoutUser} from "./api/supabase";
 import {fetchAds} from "./api/adApi";
 import Modal from "./components/Modal";
+import SavedSearches from "./components/SavedSearches";
 
 function AppContent() {
     const [user, setUser] = useState(null);
@@ -57,19 +58,14 @@ function AppContent() {
 
                             <>
                                 <PropertyGrid/>
-                                {/*<Rectangle />*/}
-                                {/*<div style={{ display: 'flex', gap: '5px', padding: '30px' }}>*/}
-                                {/*    <div style={{ flex: 1 }}>*/}
-                                {/*        <Form />*/}
-                                {/*    </div>*/}
-                                {/*    <div style={{ flex: 1 }}>*/}
-                                {/*        <Carousel />*/}
-                                {/*    </div>*/}
-                                {/*</div>*/}
+
                             </>
 
 
                     } />
+                    <Route path="/saved-searches" element={<SavedSearches />} />
+
+
                 </Routes>
                 {state?.backgroundLocation && location.pathname === '/login' && (
                     <Modal onClose={() => navigate(-1)}>
