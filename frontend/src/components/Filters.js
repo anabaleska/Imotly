@@ -29,15 +29,15 @@ function Filters({ onFiltersChange, user }) {
         lift: false
     });
     const switchLabels = {
-        forSale: "For Sale",
-        terrace: "Terrace",
-        parking: "Parking",
-        furnished: "Furnished",
-        basement: "Basement",
-        newBuilding: "New Building",
-        duplex: "Duplex",
-        renovated: "Renovated",
-        lift: "Lift"
+        forSale: "Се продава",
+        terrace: "Тераса",
+        parking: "Паркинг",
+        furnished: "Наместен",
+        basement: "Подрум",
+        newBuilding: "Нова градба",
+        duplex: "Дуплекс",
+        renovated: "Реновиран",
+        lift: "Лифт"
     };
 
     const locations = ["", "Аеродром", "Арачиново", "Берово", "Битола", "Богданци",
@@ -102,7 +102,7 @@ function Filters({ onFiltersChange, user }) {
     console.log(user);
     return (
         <form onSubmit={handleSubmit} style={{ padding: '10px 220px', display: 'grid', gap: '10px',}}>
-            <h1 style={{textAlign:'center', fontWeight:'lighter',color:"#3a0ca3"}}>Filter Ads</h1>
+            <h1 style={{textAlign:'center', fontWeight:'lighter',color:"#3a0ca3"}}>Филтрирај</h1>
             <SearchInput name="title" placeholder="Наслов" value={filters.title} onChange={handleChange} />
             <div style={{
                 display: 'flex',
@@ -123,9 +123,9 @@ function Filters({ onFiltersChange, user }) {
 
             }}>
             {/*<input type="number" name="maxPrice" placeholder="Max Price" value={filters.maxPrice} onChange={handleChange} />*/}
-            <input  className={styles.inputLikeDropdown} type="number" name="numRooms" placeholder="Number of Rooms" value={filters.numRooms} onChange={handleChange} />
-            <input className={styles.inputLikeDropdown} type="number" name="floor" placeholder="Floor" value={filters.floor} onChange={handleChange} />
-            <input className={styles.inputLikeDropdown} type="number" name="numFloors" placeholder="Number of Floors" value={filters.numFloors} onChange={handleChange} />
+            <input  className={styles.inputLikeDropdown} type="number" name="numRooms" placeholder="Број на соби" value={filters.numRooms} onChange={handleChange} />
+            <input className={styles.inputLikeDropdown} type="number" name="floor" placeholder="Спрат" value={filters.floor} onChange={handleChange} />
+            <input className={styles.inputLikeDropdown} type="number" name="numFloors" placeholder="Број на спратови" value={filters.numFloors} onChange={handleChange} />
             </div>
 
             <div style={{padding:'10px', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' ,backgroundColor:"#6a6dcd",
@@ -181,7 +181,7 @@ function Filters({ onFiltersChange, user }) {
                     </button>
                 ) : (
                     <button onClick={() => setNotifyMe(true)} style={{  width:'300px', backgroundColor: "#6a6dcd", color: "white", padding: "0.75rem 1.5rem", border: "none", borderRadius: "8px", cursor: "pointer" }}>
-                        🔔 Notify me about similar properties
+                        🔔 Известете ме за слични огласи.
                     </button>
                 )}
             </div>): (<div style={{
@@ -192,11 +192,11 @@ function Filters({ onFiltersChange, user }) {
                 borderRadius: "8px",
                 margin: "1rem"
             }}>
-                <strong>🔔 Login to be notified.</strong>
+                <strong>🔔Најавете се за да бидете известени.</strong>
             </div>)}
 
             <div style={{ textAlign:'center' }}>
-            <button style={{ width:'300px', backgroundColor: "#2a2a55", color: "white", padding: "0.75rem 1.5rem", border: "none", borderRadius: "8px", cursor: "pointer" }} type="submit">Apply Filters</button>
+            <button style={{ width:'300px', backgroundColor: "#2a2a55", color: "white", padding: "0.75rem 1.5rem", border: "none", borderRadius: "8px", cursor: "pointer" }} type="submit">Пребарај според филтри</button>
             </div>
             </form>
     );

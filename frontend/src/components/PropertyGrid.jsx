@@ -79,7 +79,7 @@ const PropertyGrid = () => {
 
                     }}
                 >
-                    Previous
+                    Претходна
                 </button>
 
                 {pageNumbers.map((p, idx) =>
@@ -118,7 +118,7 @@ const PropertyGrid = () => {
 
                     }}
                 >
-                    Next
+                    Следна
                 </button>
             </div>
         );
