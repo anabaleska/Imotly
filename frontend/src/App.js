@@ -22,7 +22,7 @@ function AppContent() {
     const navigate = useNavigate();
 
     const state = location.state;
-
+    const background = state?.backgroundLocation;
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -51,6 +51,7 @@ function AppContent() {
             <div>
                 <InputDesign />
                 {/*<Navbar user={user} onLogout={handleLogout} /> /!* Navbar with logout button *!/*/}
+
                 <Routes location={state?.backgroundLocation || location}>
                     {/*<Route path="/login" element={<Login />} />*/}
                     {/*<Route path="/register" element={<Register />} />*/}

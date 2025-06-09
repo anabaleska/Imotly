@@ -46,8 +46,10 @@ const Register = ({ onClose }) => {
             } else {
                 setSuccess('Registration successful! Please log in.');
                 localStorage.setItem('supabase_user', JSON.stringify(response.user));
-                if (onClose) onClose(); // close modal if opened in modal
-                navigate('/login');
+                if (onClose) onClose();
+                navigate('/login', {
+                    state: { backgroundLocation: location.state?.backgroundLocation || location },
+                });
             }
         } catch (err) {
             setError('An unexpected error occurred. Please try again.');
@@ -99,7 +101,9 @@ const Register = ({ onClose }) => {
                 <button type="submit" className={styles.button}>Register</button>
             </form>
             <div className={styles.link}>
-                Already have an account? <Link to="/login" state={{ backgroundLocation: location }}>Login Here!</Link>
+                Already have an account? <Link to="/login" state={{ backgroundLocation: location.state?.backgroundLocation || location }}>
+                Login Here!
+            </Link>
             </div>
         </div>
     );

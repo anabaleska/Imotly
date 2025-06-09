@@ -72,7 +72,9 @@ const Login = ({ onClose }) => {
                 <button type="submit" className={styles.button}>Login</button>
             </form>
             <div className={styles.link}>
-                Don’t have an account? <Link to="/register" state={{ backgroundLocation: location }}>Register Here!</Link>
+                Don’t have an account? <Link to="/register" state={{ backgroundLocation: location.state?.backgroundLocation || location }}>
+                Register Here!
+            </Link>
             </div>
         </div>
     );
