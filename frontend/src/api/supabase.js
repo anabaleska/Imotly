@@ -35,14 +35,15 @@ export const loginUser = async (email, password) => {
         });
 
         if (error) {
-            return { error: error.message };
+            return { error };
         }
 
         return { user: data.user };
     } catch (error) {
-        return { error: error.message };
+        return { error };
     }
 };
+
 
 
 
